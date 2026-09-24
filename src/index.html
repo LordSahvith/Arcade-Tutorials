@@ -12,20 +12,36 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+      }
+
+      section {
+        width: 100%;
+        max-width: 100%;
+      }
 
       canvas {
         display: block;
         margin: 0 auto;
+        /* width: 100%;
+        max-width: 100%; */
         background: #000;
         image-rendering: pixelated;
       }
-      }
+      
     </style>
   </head>
   <body>
-    <h1>Arcade Tutorials</h1>
-    <canvas id="gameCanvas" width="800" height="600" />
+    <section>
+      <h1>Arcade Tutorials</h1>
+    </section>
 
-    <script type="module" src="./games/pong.js"></script>
+    <section>
+      <canvas id="gameCanvas" />
+    </section>
+
+    <script type="module" src="./games/pong/pong-v1.js"></script>
   </body>
 </html>
