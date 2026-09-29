@@ -1,4 +1,8 @@
 export class Renderer {
+  /**
+   * @param {String} canvasID
+   * @param {{width: number, height: number}} size
+   */
   constructor(canvasID, size) {
     this.canvas = document.querySelector(canvasID);
     if (!this.canvas) throw new Error(`${canvasID} canvas not found`);

@@ -3,6 +3,10 @@ import { GAME, BALL } from "./data";
 import { Ball } from "./Ball";
 
 export class World {
+  /**
+   * @param {String} canvasID
+   * @param {{width: number, height: number}} size
+   */
   constructor(canvasID, size) {
     this.renderer = new Renderer(canvasID, size);
     this.actors = [];
@@ -32,6 +36,7 @@ export class World {
     if (deltaTime > GAME.MAX_FRAME_TIME) deltaTime = GAME.MAX_FRAME_TIME;
 
     this.accumulator += deltaTime;
+
     while (this.accumulator >= this.FIXED_DELTA_TIME) {
       this.tick(this.FIXED_DELTA_TIME);
       this.accumulator -= this.FIXED_DELTA_TIME;
@@ -39,6 +44,7 @@ export class World {
 
     const alpha = this.accumulator / this.FIXED_DELTA_TIME;
     this.render(alpha);
+
     requestAnimationFrame(this.update);
   };
 

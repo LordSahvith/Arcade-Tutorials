@@ -14,8 +14,8 @@ export const BALL = {
     y: CANVAS.HEIGHT / 2,
   },
   VEL: {
-    x: 50,
-    y: 50,
+    x: 100,
+    y: 100,
   },
   RADIUS: 10,
 };
