@@ -20,8 +20,8 @@ const CONSTANTS = {
   },
   ball: {
     vel: {
-      x: 5,
-      y: 1,
+      x: 300,
+      y: 60,
     },
   },
   paddle: {
@@ -41,6 +41,10 @@ const ball = {
     x: 300,
     y: 400,
   },
+  prevPos: {
+    x: 300,
+    y: 400,
+  },
   vel: { ...CONSTANTS.ball.vel },
   radius: 10,
   maxBounceAngle: Math.PI / 4, // 45° off a paddle edge
@@ -53,12 +57,23 @@ const paddle1 = {
     x: CONSTANTS.canvas.margins.xs,
     y: CONSTANTS.canvas.size.height / 2 - CONSTANTS.paddle.size.height / 2,
   },
+  prevPos: {
+    x: CONSTANTS.canvas.margins.xs,
+    y: CONSTANTS.canvas.size.height / 2 - CONSTANTS.paddle.size.height / 2,
+  },
   vel: { ...CONSTANTS.paddle.vel },
   size: { ...CONSTANTS.paddle.size },
 };
 
 const paddle2 = {
   pos: {
+    x:
+      CONSTANTS.canvas.size.width -
+      CONSTANTS.paddle.size.width -
+      CONSTANTS.canvas.margins.xs,
+    y: CONSTANTS.canvas.size.height / 2 - CONSTANTS.paddle.size.height / 2,
+  },
+  prevPos: {
     x:
       CONSTANTS.canvas.size.width -
       CONSTANTS.paddle.size.width -
@@ -109,12 +124,26 @@ function update(now) {
     updateAll();
     accumulator -= FIXED_DELTA_TIME;
   }
-  drawAll();
+  const alpha = accumulator / FIXED_DELTA_TIME;
+  drawAll(alpha);
 
   requestAnimationFrame(update);
 }
 
+function savePrevPositions() {
+  for (const obj of [ball, paddle1, paddle2]) {
+    // copy the values by assigning them directly,
+    // do NOT assign a reference like so: obj.prevPos = obj.pos
+    // either
+    // obj.prevPos.x = obj.pos.x;
+    // obj.prevPos.y = obj.pos.y;
+    // or
+    obj.prevPos = { ...obj.pos };
+  }
+}
+
 function updateAll() {
+  savePrevPositions();
   moveAll();
 
   if (score.player1 === 7 || score.player2 === 7) {
@@ -127,12 +156,23 @@ function updateAll() {
   }
 }
 
-function drawAll() {
+function lerp(valueA, valueB, alpha) {
+  return valueA + (valueB - valueA) * alpha;
+}
+
+function renderPos(obj, alpha) {
+  return {
+    x: lerp(obj.prevPos.x, obj.pos.x, alpha),
+    y: lerp(obj.prevPos.y, obj.pos.y, alpha),
+  };
+}
+
+function drawAll(alpha = 1) {
   drawCourt();
   drawNet();
-  drawCircle(ball.pos, ball.radius, "#d40000");
-  drawRect(paddle1.pos, paddle1.size, "#d40000");
-  drawRect(paddle2.pos, paddle2.size, "#d40000");
+  drawCircle(renderPos(ball, alpha), ball.radius, "#d40000");
+  drawRect(renderPos(paddle1, alpha), paddle1.size, "#d40000");
+  drawRect(renderPos(paddle2, alpha), paddle2.size, "#d40000");
 
   drawScore();
 }
@@ -143,8 +183,8 @@ function moveAll() {
   paddleAI(paddle2);
   paddleCollision(paddle1);
   paddleCollision(paddle2, false);
-  ball.pos.x += ball.vel.x;
-  ball.pos.y += ball.vel.y;
+  ball.pos.x += ball.vel.x * FIXED_DELTA_TIME;
+  ball.pos.y += ball.vel.y * FIXED_DELTA_TIME;
 }
 
 function requireCanvas() {
@@ -203,6 +243,7 @@ function serveBall(bServeLeft) {
     x: canvas.width / 2,
     y: getRandServeLocation(),
   };
+  ball.prevPos = { ...ball.pos };
 
   if (bServeLeft) {
     ball.vel.x = -CONSTANTS.ball.vel.x;
@@ -378,7 +419,11 @@ function calculateMousePos(event) {
 function updatePaddlePos(event) {
   const pos = calculateMousePos(event);
   pos.x = paddle1.pos.x; // paddle should NOT move left/right on the x axis
-  pos.y = pos.y - paddle1.size.height / 2;
+  pos.y = clamp(
+    pos.y - paddle1.size.height / 2,
+    0,
+    canvas.height - paddle1.size.height,
+  );
 
   paddle1.pos = pos;
 }
