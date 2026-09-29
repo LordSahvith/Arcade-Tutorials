@@ -1,24 +1,17 @@
+import { Actor } from "./Actor";
 import { CANVAS } from "./data";
-import { lerp } from "./lib/math";
 
-export class Ball {
+export class Ball extends Actor {
   /**
    * @param {{x: number, y: number}} pos
    * @param {{x: number, y: number}} vel
+   * @param {number} vel
+   * @param {string} color
    */
   constructor(pos, vel = { x: 200, y: 50 }, radius = 10, color = "red") {
-    this.pos = { ...pos };
-    this.prevPos = { ...pos };
+    super(pos, color);
     this.vel = { ...vel };
     this.radius = radius;
-    this.color = color;
-  }
-
-  getRenderPos(alpha) {
-    return {
-      x: lerp(this.prevPos.x, this.pos.x, alpha),
-      y: lerp(this.prevPos.y, this.pos.y, alpha),
-    };
   }
 
   beginPlay() {
@@ -26,8 +19,8 @@ export class Ball {
   }
 
   tick(deltaTime) {
-    this.prevPos.x = this.pos.x;
-    this.prevPos.y = this.pos.y;
+    super.tick(deltaTime);
+
     this.pos.x += this.vel.x * deltaTime;
     this.pos.y += this.vel.y * deltaTime;
 
@@ -38,25 +31,13 @@ export class Ball {
     renderer.drawCircle(this.getRenderPos(alpha), this.radius, this.color);
   }
 
-  /**
-   * @param {{x: number, y: number}} pos
-   */
-  teleport(pos) {
-    this.pos.x = pos.x;
-    this.pos.y = pos.y;
-    this.prevPos.x = pos.x; // set prevPos to new pos to keep from
-    this.prevPos.y = pos.y; // interpolating between the two next render()
-  }
-
   serve(dir) {
     this.teleport({ x: CANVAS.WIDTH / 2, y: CANVAS.HEIGHT / 2 });
-
-    // That also fits into GameMode once it's handling scoring.
     this.vel.x = dir * Math.abs(this.vel.x);
   }
 
   checkWallCollision() {
-    // Ball.checkWallCollision
+    // left / right: out of bounds, let GameMode score it
     if (this.pos.x + this.radius < 0) this.world.gameMode.onBallOut("left");
     if (this.pos.x - this.radius > CANVAS.WIDTH)
       this.world.gameMode.onBallOut("right");
