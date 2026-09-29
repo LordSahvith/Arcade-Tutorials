@@ -1,5 +1,6 @@
 import { Ball } from "./Ball";
-import { Scoreboard } from "./Scoreboard";
+import { Court } from "./Court";
+import { HUD } from "./HUD";
 import { CANVAS, BALL } from "./data";
 
 export class GameMode {
@@ -12,10 +13,11 @@ export class GameMode {
   }
 
   beginPlay() {
-    this.ball = this.world.spawn(new Ball(BALL.POS, BALL.VEL, BALL.RADIUS));
-    this.scoreboard = this.world.spawn(
-      new Scoreboard({ x: CANVAS.WIDTH / 2, y: 40 }),
+    this.court = this.world.spawn(
+      new Court({ x: CANVAS.WIDTH / 2, y: CANVAS.MARGINS.xs }),
     );
+    this.ball = this.world.spawn(new Ball(BALL.POS, BALL.VEL, BALL.RADIUS));
+    this.hud = this.world.spawn(new HUD({ x: CANVAS.WIDTH / 2, y: 40 }));
   }
 
   onBallOut(side) {

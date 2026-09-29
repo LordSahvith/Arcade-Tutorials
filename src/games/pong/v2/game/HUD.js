@@ -1,6 +1,6 @@
 import { Actor } from "./Actor";
 
-export class Scoreboard extends Actor {
+export class HUD extends Actor {
   /**
    * @param {{x: number, y: number}} pos
    * @param {string} color

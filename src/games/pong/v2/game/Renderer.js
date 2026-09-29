@@ -47,9 +47,28 @@ export class Renderer {
   }
 
   drawText(pos, text, font, color, align) {
+    this.ctx.save();
     this.ctx.font = font;
     this.ctx.fillStyle = color;
     this.ctx.textAlign = align;
     this.ctx.fillText(text, pos.x, pos.y);
+    this.ctx.restore();
+  }
+
+  drawLine(start, end, dash, gap, lineWidth, color) {
+    this.ctx.save();
+    // Start a new path
+    this.ctx.beginPath();
+    this.ctx.setLineDash([dash, gap]);
+    // Move to the start point
+    this.ctx.moveTo(start.x, start.y);
+    // Draw a line to the end point
+    this.ctx.lineTo(end.x, end.y);
+    // Set line style
+    this.ctx.lineWidth = lineWidth;
+    this.ctx.strokeStyle = color;
+    // Draw the path
+    this.ctx.stroke();
+    this.ctx.restore();
   }
 }
