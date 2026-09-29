@@ -276,7 +276,9 @@ function overlap(paddle, ball) {
 }
 
 /**
- * Handles collision between paddle and ball.
+ * Handles collision between paddle and ball. Checks whether the ball's
+ * leading edge crossed the paddle's front face during this tick, so fast
+ * balls can't pass through the paddle between ticks.
  *
  * @param {*} paddle
  * @param {Boolean} bIsLeft
@@ -284,16 +286,38 @@ function overlap(paddle, ball) {
 function paddleCollision(paddle, bIsLeft = true) {
   // ignore a ball already moving away (prevents repeat hits)
   const movingToward = bIsLeft ? ball.vel.x < 0 : ball.vel.x > 0;
-  if (!movingToward || !overlap(paddle, ball)) return;
+  if (!movingToward) return;
 
-  // move the ball flush against the paddle's front edge
-  ball.pos.x = bIsLeft
-    ? paddle.pos.x + paddle.size.width + ball.radius
-    : paddle.pos.x - ball.radius;
+  // the paddle face the ball can hit, and the offset to the ball's leading edge
+  const faceX = bIsLeft ? paddle.pos.x + paddle.size.width : paddle.pos.x;
+  const edge = bIsLeft ? -ball.radius : ball.radius;
+  const prevEdgeX = ball.prevPos.x + edge;
+  const currEdgeX = ball.pos.x + edge;
+
+  // did the leading edge cross the face this tick?
+  const crossed = bIsLeft
+    ? prevEdgeX >= faceX && currEdgeX <= faceX
+    : prevEdgeX <= faceX && currEdgeX >= faceX;
+  if (!crossed) return;
+
+  // how far through the tick (0-1) the crossing happened, and the ball's y then
+  const alpha = (faceX - prevEdgeX) / (currEdgeX - prevEdgeX);
+  const hitY = lerp(ball.prevPos.y, ball.pos.y, alpha);
+
+  // ball passed above or below the paddle
+  if (
+    hitY + ball.radius < paddle.pos.y ||
+    hitY - ball.radius > paddle.pos.y + paddle.size.height
+  )
+    return;
+
+  // place the ball flush against the face, where it hit
+  ball.pos.x = faceX - edge;
+  ball.pos.y = hitY;
 
   const paddleCenterY = paddle.pos.y + paddle.size.height / 2;
   const offset = clamp(
-    (ball.pos.y - paddleCenterY) / (paddle.size.height / 2),
+    (hitY - paddleCenterY) / (paddle.size.height / 2),
     -1,
     1,
   );
