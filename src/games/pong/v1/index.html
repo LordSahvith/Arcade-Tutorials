@@ -6,46 +6,29 @@
     <title>Arcade Tutorials</title>
 
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
       body {
         background-color: rgba(0, 0, 0, 0.8);
         text-align: center;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
         width: 100%;
         max-width: 100%;
         margin: 0 auto;
       }
 
       section {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 40px;
         width: 100%;
         max-width: 100%;
       }
 
-      ul {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: left;
+      canvas {
+        display: block;
+        margin: 0 auto;
         width: 100%;
         max-width: 100%;
-      }
-
-      li {
-        width: 100%;
-        max-width: 25%;
+        background: #000;
+        image-rendering: pixelated;
       }
       
     </style>
@@ -56,11 +39,9 @@
     </section>
 
     <section>
-      <ul>
-        <li><a href="./games/pong/v1/index.html">Pong V1</a></li>
-        <li><a href="./games/pong/v2/index.html">Pong V2</a></li>
-      </ul>
+      <canvas id="gameCanvas"></canvas>
     </section>
 
+    <script type="module" src="main.js"></script>
   </body>
 </html>

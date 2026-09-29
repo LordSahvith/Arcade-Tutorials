@@ -4,8 +4,8 @@ let ctx;
 const CONSTANTS = {
   canvas: {
     size: {
-      width: 800,
-      height: 800 * 0.5625, // 16:9 ratio
+      width: 1080,
+      height: 1080 * 0.5625, // 16:9 ratio
     },
     margins: {
       xs: 15,
@@ -27,7 +27,7 @@ const CONSTANTS = {
   paddle: {
     vel: {
       x: 0,
-      y: 25,
+      y: 420,
     },
     size: {
       width: 15,
@@ -50,7 +50,7 @@ const ball = {
 
 const paddle1 = {
   pos: {
-    x: CONSTANTS.canvas.margins.md,
+    x: CONSTANTS.canvas.margins.xs,
     y: CONSTANTS.canvas.size.height / 2 - CONSTANTS.paddle.size.height / 2,
   },
   vel: { ...CONSTANTS.paddle.vel },
@@ -62,7 +62,7 @@ const paddle2 = {
     x:
       CONSTANTS.canvas.size.width -
       CONSTANTS.paddle.size.width -
-      CONSTANTS.canvas.margins.md,
+      CONSTANTS.canvas.margins.xs,
     y: CONSTANTS.canvas.size.height / 2 - CONSTANTS.paddle.size.height / 2,
   },
   vel: { ...CONSTANTS.paddle.vel },
@@ -77,13 +77,21 @@ const score = {
 const FIXED_DELTA_TIME = 1 / CONSTANTS.GAME.TICK_RATE;
 let lastTime = performance.now();
 let accumulator = 0;
+let deltaTime = 0;
+
+const keys = {};
 
 function startGame() {
   canvas = requireCanvas();
   ctx = requireRenderingContext(canvas);
 
   canvas.addEventListener("mousemove", updatePaddlePos);
-  document.addEventListener("keydown", movePaddle);
+  document.addEventListener("keydown", onKeyDown);
+  document.addEventListener("keyup", onKeyUp);
+  // clear held keys if the window loses focus, otherwise the paddle keeps moving
+  window.addEventListener("blur", () => {
+    for (const code in keys) keys[code] = false;
+  });
 
   serveBall(getRandServeDirection());
 
@@ -91,7 +99,7 @@ function startGame() {
 }
 
 function update(now) {
-  let deltaTime = (now - lastTime) / 1000;
+  deltaTime = (now - lastTime) / 1000;
   lastTime = now;
   if (deltaTime > CONSTANTS.GAME.MAX_FRAME_TIME)
     deltaTime = CONSTANTS.GAME.MAX_FRAME_TIME;
@@ -122,7 +130,7 @@ function updateAll() {
 function drawAll() {
   drawCourt();
   drawNet();
-  drawCircle(ball.pos, ball.radius, "#a800a8");
+  drawCircle(ball.pos, ball.radius, "#d40000");
   drawRect(paddle1.pos, paddle1.size, "#d40000");
   drawRect(paddle2.pos, paddle2.size, "#d40000");
 
@@ -131,6 +139,7 @@ function drawAll() {
 
 function moveAll() {
   wallCollision();
+  movePlayerPaddle();
   paddleAI(paddle2);
   paddleCollision(paddle1);
   paddleCollision(paddle2, false);
@@ -174,8 +183,12 @@ function paddleAI(paddle) {
   const ballCenter = ball.pos.y + ball.radius;
   const diff = ballCenter - paddleCenter;
 
+  // keeps AI from always hitting the ball
   if (Math.abs(diff) < paddle.size.height / 4) return;
-  paddle.pos.y += diff > 0 ? paddle.vel.y : -paddle.vel.y;
+
+  const direction = diff > 0 ? 1 : -1;
+  const next = paddle.pos.y + direction * paddle.vel.y * FIXED_DELTA_TIME;
+  paddle.pos.y = clamp(next, 0, canvas.height - paddle.size.height);
 }
 
 /**
@@ -235,8 +248,9 @@ function paddleCollision(paddle, bIsLeft = true) {
       ),
     );
     const angle = offset * ball.maxBounceAngle;
-    const speed = Math.min(
+    const speed = clamp(
       Math.hypot(ball.vel.x, ball.vel.y) * ball.speedUp,
+      0,
       ball.maxSpeed,
     );
 
@@ -246,16 +260,6 @@ function paddleCollision(paddle, bIsLeft = true) {
       x: Math.sign(dir) * speed * Math.cos(angle),
       y: speed * Math.sin(angle),
     };
-  }
-
-  // paddle stops at top of canvas
-  if (paddle.pos.y <= 0) {
-    paddle.pos.y = 0;
-  }
-
-  // paddle stops at bottom of canvas
-  if (paddle.pos.y + paddle.size.height >= canvas.height) {
-    paddle.pos.y = canvas.height - paddle.size.height;
   }
 }
 
@@ -379,13 +383,38 @@ function updatePaddlePos(event) {
   paddle1.pos = pos;
 }
 
-function movePaddle(event) {
-  const code = event.code;
-  if (code === "KeyW") {
-    paddle1.pos.y -= paddle1.vel.y;
-  } else if (code === "KeyS") {
-    paddle1.pos.y += paddle1.vel.y;
-  }
+function onKeyDown(event) {
+  keys[event.code] = true;
+}
+
+function onKeyUp(event) {
+  keys[event.code] = false;
+}
+
+/**
+ * Moves the player's paddle based on held keys. Runs every fixed tick so
+ * movement is smooth and independent of the OS key-repeat rate.
+ */
+function movePlayerPaddle() {
+  let direction = 0;
+  if (keys.KeyW) direction -= 1;
+  if (keys.KeyS) direction += 1;
+
+  // current pos + direction (up/down) * paddle speed * fixed delta time (every tick)
+  const next = paddle1.pos.y + direction * paddle1.vel.y * FIXED_DELTA_TIME;
+  paddle1.pos.y = clamp(next, 0, canvas.height - paddle1.size.height);
+}
+
+/**
+ * Constrain `value` to the inclusive range [min, max].
+ *
+ * @param {Number} value
+ * @param {Number} min
+ * @param {Number} max
+ * @returns {Number}
+ */
+function clamp(value, min, max) {
+  return value < min ? min : value > max ? max : value;
 }
 
 window.onload = startGame;
