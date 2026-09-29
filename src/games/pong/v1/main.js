@@ -15,7 +15,7 @@ const CONSTANTS = {
     },
   },
   GAME: {
-    TICK_RATE: 10,
+    TICK_RATE: 60,
     MAX_FRAME_TIME: 0.25,
   },
   ball: {
@@ -260,19 +260,16 @@ function serveBall(bServeLeft) {
 }
 
 /**
- * Checks if ball and paddle are overlapping
+ * Checks if two 1D ranges [minA, maxA] and [minB, maxB] overlap
  *
- * @param {*} paddle
- * @param {*} ball
+ * @param {Number} minA
+ * @param {Number} maxA
+ * @param {Number} minB
+ * @param {Number} maxB
  * @returns {Boolean}
  */
-function overlap(paddle, ball) {
-  return (
-    paddle.pos.x < ball.pos.x + ball.radius &&
-    paddle.pos.x + paddle.size.width > ball.pos.x - ball.radius &&
-    paddle.pos.y < ball.pos.y + ball.radius &&
-    paddle.pos.y + paddle.size.height > ball.pos.y - ball.radius
-  );
+function rangesOverlap(minA, maxA, minB, maxB) {
+  return minA < maxB && maxA > minB;
 }
 
 /**
@@ -305,11 +302,13 @@ function paddleCollision(paddle, bIsLeft = true) {
   const hitY = lerp(ball.prevPos.y, ball.pos.y, alpha);
 
   // ball passed above or below the paddle
-  if (
-    hitY + ball.radius < paddle.pos.y ||
-    hitY - ball.radius > paddle.pos.y + paddle.size.height
-  )
-    return;
+  const hitPaddle = rangesOverlap(
+    paddle.pos.y,
+    paddle.pos.y + paddle.size.height,
+    hitY - ball.radius,
+    hitY + ball.radius,
+  );
+  if (!hitPaddle) return;
 
   // place the ball flush against the face, where it hit
   ball.pos.x = faceX - edge;
