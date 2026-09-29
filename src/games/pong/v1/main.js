@@ -4,8 +4,8 @@ let ctx;
 const CONSTANTS = {
   canvas: {
     size: {
-      width: 1080,
-      height: 1080 * 0.5625, // 16:9 ratio
+      width: 800,
+      height: 800 * (9 / 16), // 16:9 ratio
     },
     margins: {
       xs: 15,
