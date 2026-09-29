@@ -1,5 +1,5 @@
-export function lerp(valueA, valueB, alpha) {
-  return valueA + (valueB - valueA) * alpha;
+export function lerp(a, b, alpha) {
+  return a + (b - a) * alpha;
 }
 
 /**

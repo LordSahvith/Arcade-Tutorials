@@ -1,15 +1,13 @@
-import { lerp } from "./lib/math";
-
 export class Renderer {
-  constructor(canvasID, dimensions = { width: 800, height: 600 }) {
+  constructor(canvasID, size) {
     this.canvas = document.querySelector(canvasID);
     if (!this.canvas) throw new Error(`${canvasID} canvas not found`);
 
     this.ctx = this.canvas.getContext("2d");
     if (!this.ctx) throw new Error("canvas context not found");
 
-    this.canvas.width = dimensions.width;
-    this.canvas.height = dimensions.height;
+    this.canvas.width = size.width;
+    this.canvas.height = size.height;
   }
 
   get width() {
@@ -43,13 +41,4 @@ export class Renderer {
     this.ctx.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
     this.ctx.fill();
   }
-
-  renderPos(obj, alpha) {
-    return {
-      x: lerp(obj.prevPos.x, obj.pos.x, alpha),
-      y: lerp(obj.prevPos.y, obj.pos.y, alpha),
-    };
-  }
-
-  render() {}
 }
