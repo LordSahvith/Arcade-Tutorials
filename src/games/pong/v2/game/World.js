@@ -1,6 +1,6 @@
 import { Renderer } from "./Renderer";
-import { GAME, BALL } from "./data";
-import { Ball } from "./Ball";
+import { GameMode } from "./GameMode";
+import { GAME } from "./data";
 
 export class World {
   /**
@@ -9,15 +9,27 @@ export class World {
    */
   constructor(canvasID, size) {
     this.renderer = new Renderer(canvasID, size);
+    this.gameMode = new GameMode(this);
+
     this.actors = [];
+    this.nextId = 0;
+
     this.FIXED_DELTA_TIME = 1 / GAME.TICK_RATE;
     this.lastTime = performance.now();
     this.accumulator = 0;
+  }
 
-    this.ball = new Ball(BALL.POS, BALL.VEL, BALL.RADIUS);
+  spawn(obj) {
+    obj.id = this.nextId++;
+    obj.world = this;
+    this.actors.push(obj);
+    obj.beginPlay();
+
+    return obj;
   }
 
   beginPlay() {
+    this.gameMode.beginPlay();
     requestAnimationFrame(this.update);
   }
 
@@ -49,13 +61,11 @@ export class World {
   };
 
   tick(deltaTime) {
-    // for (const actor of this.actors) actor.tick(deltaTime);
-
-    this.ball.tick(deltaTime); // TODO: add to this.actors[] via gameMode
+    for (const actor of this.actors) actor.tick(deltaTime);
   }
 
   render(alpha = 1) {
     this.renderer.clear();
-    this.ball.render(this.renderer, alpha);
+    for (const actor of this.actors) actor.render(this.renderer, alpha);
   }
 }

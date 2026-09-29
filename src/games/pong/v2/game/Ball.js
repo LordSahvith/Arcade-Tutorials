@@ -56,17 +56,10 @@ export class Ball {
   }
 
   checkWallCollision() {
-    // left
-    if (this.pos.x + this.radius < 0) {
-      // score for rightPlayer (AI)
-      this.serve(-1);
-    }
-
-    // right
-    if (this.pos.x - this.radius > CANVAS.WIDTH) {
-      // score for leftPlayer (Player)
-      this.serve(1);
-    }
+    // Ball.checkWallCollision
+    if (this.pos.x + this.radius < 0) this.world.gameMode.onBallOut("left");
+    if (this.pos.x - this.radius > CANVAS.WIDTH)
+      this.world.gameMode.onBallOut("right");
 
     // top
     if (this.pos.y - this.radius < 0) {
