@@ -1,5 +1,6 @@
-import { BALL } from "./data";
 import { Ball } from "./Ball";
+import { Scoreboard } from "./Scoreboard";
+import { CANVAS, BALL } from "./data";
 
 export class GameMode {
   constructor(world) {
@@ -12,6 +13,9 @@ export class GameMode {
 
   beginPlay() {
     this.ball = this.world.spawn(new Ball(BALL.POS, BALL.VEL, BALL.RADIUS));
+    this.scoreboard = this.world.spawn(
+      new Scoreboard({ x: CANVAS.WIDTH / 2, y: 40 }),
+    );
   }
 
   onBallOut(side) {

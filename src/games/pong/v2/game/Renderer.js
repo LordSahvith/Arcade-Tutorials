@@ -45,4 +45,11 @@ export class Renderer {
     this.ctx.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
     this.ctx.fill();
   }
+
+  drawText(pos, text, font, color, align) {
+    this.ctx.font = font;
+    this.ctx.fillStyle = color;
+    this.ctx.textAlign = align;
+    this.ctx.fillText(text, pos.x, pos.y);
+  }
 }
