@@ -15,7 +15,7 @@ const CONSTANTS = {
     },
   },
   GAME: {
-    TICK_RATE: 60,
+    TICK_RATE: 10,
     MAX_FRAME_TIME: 0.25,
   },
   ball: {
@@ -178,13 +178,16 @@ function drawAll(alpha = 1) {
 }
 
 function moveAll() {
-  wallCollision();
+  // move first
   movePlayerPaddle();
   paddleAI(paddle2);
-  paddleCollision(paddle1);
-  paddleCollision(paddle2, false);
   ball.pos.x += ball.vel.x * FIXED_DELTA_TIME;
   ball.pos.y += ball.vel.y * FIXED_DELTA_TIME;
+
+  // then check collisions
+  wallCollision();
+  paddleCollision(paddle1);
+  paddleCollision(paddle2, false);
 }
 
 function requireCanvas() {
@@ -220,7 +223,7 @@ function getRandServeLocation() {
 
 function paddleAI(paddle) {
   const paddleCenter = paddle.pos.y + paddle.size.height / 2;
-  const ballCenter = ball.pos.y + ball.radius;
+  const ballCenter = ball.pos.y;
   const diff = ballCenter - paddleCenter;
 
   // keeps AI from always hitting the ball
@@ -279,29 +282,32 @@ function overlap(paddle, ball) {
  * @param {Boolean} bIsLeft
  */
 function paddleCollision(paddle, bIsLeft = true) {
-  if (overlap(paddle, ball)) {
-    const paddleCenterY = paddle.pos.y + paddle.size.height / 2;
-    const offset = Math.max(
-      -1,
-      Math.min(
-        (ball.pos.y + ball.radius - paddleCenterY) / (paddle.size.height / 2),
-        1,
-      ),
-    );
-    const angle = offset * ball.maxBounceAngle;
-    const speed = clamp(
-      Math.hypot(ball.vel.x, ball.vel.y) * ball.speedUp,
-      0,
-      ball.maxSpeed,
-    );
+  // ignore a ball already moving away (prevents repeat hits)
+  const movingToward = bIsLeft ? ball.vel.x < 0 : ball.vel.x > 0;
+  if (!movingToward || !overlap(paddle, ball)) return;
 
-    bIsLeft ? (ball.pos.x += 1) : (ball.pos.x -= 1); // nudge ball away
-    const dir = bIsLeft ? 1 : -1;
-    ball.vel = {
-      x: Math.sign(dir) * speed * Math.cos(angle),
-      y: speed * Math.sin(angle),
-    };
-  }
+  // move the ball flush against the paddle's front edge
+  ball.pos.x = bIsLeft
+    ? paddle.pos.x + paddle.size.width + ball.radius
+    : paddle.pos.x - ball.radius;
+
+  const paddleCenterY = paddle.pos.y + paddle.size.height / 2;
+  const offset = clamp(
+    (ball.pos.y - paddleCenterY) / (paddle.size.height / 2),
+    -1,
+    1,
+  );
+  const angle = offset * ball.maxBounceAngle;
+  const speed = Math.min(
+    Math.hypot(ball.vel.x, ball.vel.y) * ball.speedUp,
+    ball.maxSpeed,
+  );
+
+  const dir = bIsLeft ? 1 : -1;
+  ball.vel = {
+    x: dir * speed * Math.cos(angle),
+    y: speed * Math.sin(angle),
+  };
 }
 
 function wallCollision() {
@@ -319,14 +325,14 @@ function wallCollision() {
 
   // top
   if (ball.pos.y - ball.radius < 0) {
-    ball.pos.y += 1; // nudge ball away
-    ball.vel.y *= -1;
+    ball.pos.y = ball.radius; // nudge ball away
+    ball.vel.y = Math.abs(ball.vel.y); // always down
   }
 
   // bottom
   if (ball.pos.y + ball.radius > canvas.height) {
-    ball.pos.y -= 1; // nudge ball away
-    ball.vel.y *= -1;
+    ball.pos.y = canvas.height - ball.radius; // nudge ball away
+    ball.vel.y = -Math.abs(ball.vel.y); // always up
   }
 }
 
