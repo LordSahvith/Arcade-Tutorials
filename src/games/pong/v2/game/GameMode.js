@@ -34,7 +34,6 @@ export class GameMode {
   }
 
   onBallOut(side) {
-    console.log(side);
     this.handleScore(side);
 
     if (this.bIsGameOver()) {

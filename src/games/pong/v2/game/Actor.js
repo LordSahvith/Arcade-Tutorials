@@ -2,6 +2,8 @@ import { lerp } from "./lib/math";
 
 export class Actor {
   /**
+   * Parameter objects should always be in lowercase
+   * e.g. pos.x, not pos.X
    * @param {{x: number, y: number}} pos
    * @param {string} color
    */

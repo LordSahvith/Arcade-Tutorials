@@ -1,14 +1,14 @@
-import { Renderer } from "./Renderer";
 import { GameMode } from "./GameMode";
 import { GAME } from "./data";
 
 export class World {
   /**
-   * @param {String} canvasID
-   * @param {{width: number, height: number}} size
+   * @param {Renderer} renderer
+   * @param {WebInputManager} input
    */
-  constructor(canvasID, size) {
-    this.renderer = new Renderer(canvasID, size);
+  constructor(renderer, input) {
+    this.renderer = renderer;
+    this.input = input;
     this.gameMode = new GameMode(this);
 
     this.actors = [];
@@ -29,15 +29,19 @@ export class World {
   }
 
   beginPlay() {
+    this.input.attach(window, this.renderer.canvas);
     this.gameMode.beginPlay();
     requestAnimationFrame(this.update);
   }
 
   /**
-   * Controls the frame update of the game. Uses an arrow
-   * function to bind `this` (World) to the update method
-   * so it'll always use this World's update().
+   * Controls the frame update of the game.
    * `now` gets passed in from requestAnimationFrame().
+   *
+   * TODO: add to standards doc when we create one
+   * Uses an arrow function to bind `this` (World)
+   * to the update method so it'll always use this
+   * World's update().
    *
    * @param {number} now current timestamp
    */
@@ -62,6 +66,7 @@ export class World {
 
   tick(deltaTime) {
     for (const actor of this.actors) actor.tick(deltaTime);
+    this.input.endTick();
   }
 
   render(alpha = 1) {

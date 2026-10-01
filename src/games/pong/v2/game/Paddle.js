@@ -29,4 +29,8 @@ export class Paddle extends Actor {
   render(renderer, alpha) {
     renderer.drawRect(this.getRenderPos(alpha), this.size, this.color);
   }
+
+  move() {
+    // const dir = input.axis(["KeyW", "ArrowUp"], ["KeyS", "ArrowDown"]);
+  }
 }

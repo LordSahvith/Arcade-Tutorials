@@ -1,3 +1,14 @@
+/**
+ * All constants should be in form:
+ *
+ * OBJ.PROP.VALUE (e.g. PADDLE.POS.X)
+ *
+ * then objs that aren't constants
+ * should be in form:
+ *
+ * OBJ.PROP.value (PADDLES.LEFT.POS.x)
+ *
+ */
 export const MARGINS = {
   XS: 15,
   SM: 20,
