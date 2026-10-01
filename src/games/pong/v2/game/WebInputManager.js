@@ -49,7 +49,7 @@ export class WebInputManager {
       this.canvas.removeEventListener("pointermove", this.onPointerMove);
       this.canvas.removeEventListener("pointerdown", this.onPointerDown);
       this.canvas.removeEventListener("pointerup", this.onPointerUp);
-      canvas.addEventListener("pointercancel", this.onPointerUp);
+      this.canvas.removeEventListener("pointercancel", this.onPointerUp);
       this.canvas = null;
     }
     window.removeEventListener("blur", this.onBlur);

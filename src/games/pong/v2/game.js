@@ -1,7 +1,7 @@
 import { Renderer } from "./game/Renderer";
 import { World } from "./game/World";
 import { WebInputManager } from "./game/WebInputManager";
-import { CANVAS } from "./game/data";
+import { CANVAS } from "./game/_data/data";
 import { Game } from "./game/game";
 
 const gameData = {

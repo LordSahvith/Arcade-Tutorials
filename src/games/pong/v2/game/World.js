@@ -1,5 +1,5 @@
 import { GameMode } from "./GameMode";
-import { GAME } from "./data";
+import { GAME } from "./_data/data";
 
 export class World {
   /**

@@ -1,7 +1,7 @@
-import { CANVAS, BALL, MARGINS, PADDLES, GAME } from "./data";
-import { Court } from "./Court";
-import { Paddle } from "./Paddle";
-import { Ball } from "./Ball";
+import { CANVAS, BALL, MARGINS, PADDLES, GAME } from "./_data/data";
+import { Court } from "./actors/Court";
+import { Paddle } from "./actors/Paddle";
+import { Ball } from "./actors/Ball";
 import { HUD } from "./HUD";
 
 export class GameMode {

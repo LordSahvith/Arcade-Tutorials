@@ -1,4 +1,4 @@
-import { lerp } from "./lib/math";
+import { lerp } from "../lib/math";
 
 export class Actor {
   /**
