@@ -1,6 +1,6 @@
 // Net.js
 import { Actor } from "./Actor";
-import { CANVAS } from "./data";
+import { CANVAS, MARGINS } from "./data";
 
 export class Court extends Actor {
   /**
@@ -10,8 +10,8 @@ export class Court extends Actor {
   constructor(pos, color = "#a800a8") {
     super(pos, color);
     this.length = CANVAS.HEIGHT - pos.y * 2;
-    this.dash = CANVAS.MARGINS.sm;
-    this.gap = CANVAS.MARGINS.sm;
+    this.dash = MARGINS.SM;
+    this.gap = MARGINS.SM;
     this.lineWidth = 3;
   }
 

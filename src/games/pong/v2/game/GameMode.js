@@ -1,7 +1,8 @@
-import { Ball } from "./Ball";
+import { CANVAS, BALL, MARGINS, PADDLES, GAME } from "./data";
 import { Court } from "./Court";
+import { Paddle } from "./Paddle";
+import { Ball } from "./Ball";
 import { HUD } from "./HUD";
-import { CANVAS, BALL } from "./data";
 
 export class GameMode {
   constructor(world) {
@@ -14,17 +15,63 @@ export class GameMode {
 
   beginPlay() {
     this.court = this.world.spawn(
-      new Court({ x: CANVAS.WIDTH / 2, y: CANVAS.MARGINS.xs }),
+      new Court({ x: CANVAS.WIDTH / 2, y: MARGINS.XS }),
     );
-    this.ball = this.world.spawn(new Ball(BALL.POS, BALL.VEL, BALL.RADIUS));
+    this.ball = this.world.spawn(
+      new Ball(
+        { x: BALL.POS.X, y: BALL.POS.Y },
+        { x: BALL.VEL.X, y: BALL.VEL.Y },
+        BALL.RADIUS,
+      ),
+    );
+    this.paddleLeft = this.world.spawn(
+      new Paddle(PADDLES.LEFT.POS, PADDLES.LEFT.VEL, PADDLES.LEFT.SIZE),
+    );
+    this.paddleRight = this.world.spawn(
+      new Paddle(PADDLES.RIGHT.POS, PADDLES.RIGHT.VEL, PADDLES.RIGHT.SIZE),
+    );
     this.hud = this.world.spawn(new HUD({ x: CANVAS.WIDTH / 2, y: 40 }));
   }
 
   onBallOut(side) {
+    console.log(side);
+    this.handleScore(side);
+
+    if (this.bIsGameOver()) {
+      this.gameSummary(side);
+
+      this.score = {
+        left: 0,
+        right: 0,
+      };
+
+      return;
+    }
+
+    this.ballReset(side);
+  }
+
+  handleScore(side) {
     if (side === "left") this.score.right++;
     else this.score.left++;
 
+    this.ball.bIsLoading = true;
+  }
+
+  ballReset(side) {
     // serve toward the player who lost the point
     this.ball.serve(side === "left" ? -1 : 1);
+  }
+
+  bIsGameOver() {
+    return (
+      this.score.left === GAME.MAX_SCORE || this.score.right === GAME.MAX_SCORE
+    );
+  }
+
+  gameSummary(side) {
+    console.log("winner:", side === "left" ? "right paddle" : "left paddle");
+
+    this.ballReset(side);
   }
 }

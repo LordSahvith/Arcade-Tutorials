@@ -8,10 +8,10 @@ const CONSTANTS = {
       height: 800 * (9 / 16), // 16:9 ratio
     },
     margins: {
-      xs: 15,
-      sm: 20,
-      md: 40,
-      lg: 80,
+      XS: 15,
+      SM: 20,
+      MD: 40,
+      LG: 80,
     },
   },
   GAME: {
@@ -54,11 +54,11 @@ const ball = {
 
 const paddle1 = {
   pos: {
-    x: CONSTANTS.canvas.margins.xs,
+    x: CONSTANTS.canvas.margins.XS,
     y: CONSTANTS.canvas.size.height / 2 - CONSTANTS.paddle.size.height / 2,
   },
   prevPos: {
-    x: CONSTANTS.canvas.margins.xs,
+    x: CONSTANTS.canvas.margins.XS,
     y: CONSTANTS.canvas.size.height / 2 - CONSTANTS.paddle.size.height / 2,
   },
   vel: { ...CONSTANTS.paddle.vel },
@@ -70,14 +70,14 @@ const paddle2 = {
     x:
       CONSTANTS.canvas.size.width -
       CONSTANTS.paddle.size.width -
-      CONSTANTS.canvas.margins.xs,
+      CONSTANTS.canvas.margins.XS,
     y: CONSTANTS.canvas.size.height / 2 - CONSTANTS.paddle.size.height / 2,
   },
   prevPos: {
     x:
       CONSTANTS.canvas.size.width -
       CONSTANTS.paddle.size.width -
-      CONSTANTS.canvas.margins.xs,
+      CONSTANTS.canvas.margins.XS,
     y: CONSTANTS.canvas.size.height / 2 - CONSTANTS.paddle.size.height / 2,
   },
   vel: { ...CONSTANTS.paddle.vel },
@@ -216,8 +216,8 @@ function getRandServeDirection() {
 
 function getRandServeLocation() {
   return randRange(
-    CONSTANTS.canvas.margins.lg,
-    canvas.height - CONSTANTS.canvas.margins.lg,
+    CONSTANTS.canvas.margins.LG,
+    canvas.height - CONSTANTS.canvas.margins.LG,
   );
 }
 
@@ -383,11 +383,11 @@ function drawCourt() {
 function drawNet() {
   // Start a new path
   ctx.beginPath();
-  ctx.setLineDash([CONSTANTS.canvas.margins.sm, CONSTANTS.canvas.margins.sm]); // 20px dash, 20px gap
+  ctx.setLineDash([CONSTANTS.canvas.margins.SM, CONSTANTS.canvas.margins.SM]); // 20px dash, 20px gap
   // Move to the start point
-  ctx.moveTo(canvas.width / 2, CONSTANTS.canvas.margins.xs);
+  ctx.moveTo(canvas.width / 2, CONSTANTS.canvas.margins.XS);
   // Draw a line to the end point
-  ctx.lineTo(canvas.width / 2, canvas.height - CONSTANTS.canvas.margins.xs);
+  ctx.lineTo(canvas.width / 2, canvas.height - CONSTANTS.canvas.margins.XS);
   // Set line style
   ctx.lineWidth = 3;
   ctx.strokeStyle = "#a800a8";
