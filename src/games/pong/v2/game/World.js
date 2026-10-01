@@ -1,5 +1,5 @@
-import { GameMode } from "./GameMode";
-import { GAME } from "./_data/data";
+import { GameMode } from "./game/GameMode";
+import { GAME_DATA } from "./_data/data";
 
 export class World {
   /**
@@ -14,7 +14,7 @@ export class World {
     this.actors = [];
     this.nextId = 0;
 
-    this.FIXED_DELTA_TIME = 1 / GAME.TICK_RATE;
+    this.FIXED_DELTA_TIME = 1 / GAME_DATA.TICK_RATE;
     this.lastTime = performance.now();
     this.accumulator = 0;
   }
@@ -49,7 +49,8 @@ export class World {
     let deltaTime = (now - this.lastTime) / 1000;
     this.lastTime = now;
 
-    if (deltaTime > GAME.MAX_FRAME_TIME) deltaTime = GAME.MAX_FRAME_TIME;
+    if (deltaTime > GAME_DATA.MAX_FRAME_TIME)
+      deltaTime = GAME_DATA.MAX_FRAME_TIME;
 
     this.accumulator += deltaTime;
 

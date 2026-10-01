@@ -1,6 +1,6 @@
 import { Renderer } from "./game/Renderer";
 import { World } from "./game/World";
-import { WebInputManager } from "./game/WebInputManager";
+import { WebInputManager } from "./game/input/WebInputManager";
 import { CANVAS } from "./game/_data/data";
 import { Game } from "./game/game";
 

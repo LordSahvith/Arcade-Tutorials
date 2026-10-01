@@ -21,7 +21,7 @@ export const CANVAS = {
   HEIGHT: 600,
 };
 
-export const GAME = {
+export const GAME_DATA = {
   TICK_RATE: 60,
   MAX_FRAME_TIME: 0.25,
   MAX_SCORE: 7,

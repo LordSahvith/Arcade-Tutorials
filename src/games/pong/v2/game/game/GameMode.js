@@ -1,8 +1,8 @@
-import { CANVAS, BALL, MARGINS, PADDLES, GAME } from "./_data/data";
-import { Court } from "./actors/Court";
-import { Paddle } from "./actors/Paddle";
-import { Ball } from "./actors/Ball";
-import { HUD } from "./HUD";
+import { CANVAS, BALL, MARGINS, PADDLES, GAME_DATA } from "../_data/data";
+import { Court } from "../actors/Court";
+import { Paddle } from "../actors/Paddle";
+import { Ball } from "../actors/Ball";
+import { HUD } from "../ui/HUD";
 
 export class GameMode {
   constructor(world) {
@@ -53,8 +53,6 @@ export class GameMode {
   handleScore(side) {
     if (side === "left") this.score.right++;
     else this.score.left++;
-
-    this.ball.bIsLoading = true;
   }
 
   ballReset(side) {
@@ -64,7 +62,8 @@ export class GameMode {
 
   bIsGameOver() {
     return (
-      this.score.left === GAME.MAX_SCORE || this.score.right === GAME.MAX_SCORE
+      this.score.left === GAME_DATA.MAX_SCORE ||
+      this.score.right === GAME_DATA.MAX_SCORE
     );
   }
 

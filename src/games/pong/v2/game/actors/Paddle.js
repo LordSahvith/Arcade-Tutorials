@@ -4,7 +4,7 @@ export class Paddle extends Actor {
   /**
    * @param {{x: number, y: number}} pos
    * @param {{x: number, y: number}} vel
-   * @param {{x: number, y: number}} size
+   * @param {{width: number, height: number}} size
    * @param {string} color
    */
   constructor(
@@ -19,7 +19,7 @@ export class Paddle extends Actor {
   }
 
   beginPlay() {
-    // add circle component
+    // add rect component
   }
 
   tick(deltaTime) {

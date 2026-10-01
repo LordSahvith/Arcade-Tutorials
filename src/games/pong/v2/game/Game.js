@@ -1,6 +1,6 @@
 import { Renderer } from "./Renderer";
 import { World } from "./World";
-import { WebInputManager } from "./WebInputManager";
+import { WebInputManager } from "./input/WebInputManager";
 
 export class Game {
   createRenderer(canvasID, canvasSize) {

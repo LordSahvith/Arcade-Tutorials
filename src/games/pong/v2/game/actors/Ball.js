@@ -16,7 +16,6 @@ export class Ball extends Actor {
 
   beginPlay() {
     // add circle component
-    this.bIsLoading = false;
   }
 
   tick(deltaTime) {
@@ -35,13 +34,12 @@ export class Ball extends Actor {
   serve(dir) {
     this.teleport({ x: CANVAS.WIDTH / 2, y: CANVAS.HEIGHT / 2 });
     this.vel.x = dir * Math.abs(this.vel.x);
-    this.bIsLoading = false;
   }
 
   checkWallCollision() {
     // left / right: out of bounds, let GameMode score it
     if (this.pos.x + this.radius < 0) this.world.gameMode.onBallOut("left");
-    if (this.pos.x - this.radius > CANVAS.WIDTH && !this.bIsLoading)
+    if (this.pos.x - this.radius > CANVAS.WIDTH)
       this.world.gameMode.onBallOut("right");
 
     // top
