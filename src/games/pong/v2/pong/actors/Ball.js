@@ -1,4 +1,4 @@
-import { Actor } from '../../engine/core/Actor';
+import { Actor } from '../../engine/core/actors/Actor';
 import { CANVAS } from '../config';
 
 export class Ball extends Actor {
