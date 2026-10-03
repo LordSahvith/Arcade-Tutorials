@@ -1,6 +1,6 @@
 // Net.js
-import { Actor } from "./Actor";
-import { CANVAS, MARGINS } from "../_data/data";
+import { Actor } from "../../engine/core/Actor";
+import { CANVAS, MARGINS } from "../config";
 
 export class Court extends Actor {
   /**

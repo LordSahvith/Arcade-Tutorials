@@ -1,12 +1,13 @@
-import { CANVAS, BALL, MARGINS, PADDLES, GAME_DATA } from "../_data/data";
-import { Court } from "../actors/Court";
-import { Paddle } from "../actors/Paddle";
-import { Ball } from "../actors/Ball";
-import { HUD } from "../ui/HUD";
+import { GameMode } from "../engine/core/GameMode";
+import { CANVAS, BALL, MARGINS, PADDLES, GAME_DATA } from "./config";
+import { Court } from "./actors/Court";
+import { Paddle } from "./actors/Paddle";
+import { Ball } from "./actors/Ball";
+import { HUD } from "./ui/HUD";
 
-export class GameMode {
+export class PongGameMode extends GameMode {
   constructor(world) {
-    this.world = world;
+    super(world);
     this.score = {
       left: 0,
       right: 0,

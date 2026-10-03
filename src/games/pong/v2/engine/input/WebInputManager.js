@@ -94,6 +94,7 @@ export class WebInputManager {
     this.canvas.setPointerCapture(event.pointerId);
     this.pointer.lastClickPos = { ...this.pointer.pos };
     this.pointer.bIsDown = true;
+    console.log(this.pointer);
   };
 
   onPointerUp = () => {

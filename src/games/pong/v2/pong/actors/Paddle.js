@@ -1,4 +1,4 @@
-import { Actor } from "./Actor";
+import { Actor } from "../../engine/core/Actor";
 
 export class Paddle extends Actor {
   /**
@@ -10,7 +10,7 @@ export class Paddle extends Actor {
   constructor(
     pos,
     vel = { x: 0, y: 420 },
-    size = { x: 20, y: 90 },
+    size = { width: 20, height: 90 },
     color = "red",
   ) {
     super(pos, color);
@@ -18,19 +18,7 @@ export class Paddle extends Actor {
     this.size = { ...size };
   }
 
-  beginPlay() {
-    // add rect component
-  }
-
-  tick(deltaTime) {
-    super.tick(deltaTime);
-  }
-
   render(renderer, alpha) {
     renderer.drawRect(this.getRenderPos(alpha), this.size, this.color);
-  }
-
-  move() {
-    // const dir = input.axis(["KeyW", "ArrowUp"], ["KeyS", "ArrowDown"]);
   }
 }
