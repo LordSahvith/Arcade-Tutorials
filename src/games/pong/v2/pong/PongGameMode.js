@@ -10,8 +10,7 @@ export class PongGameMode extends GameMode {
   score = { left: 0, right: 0 };
   court = null;
   ball = null;
-  paddles = []; // cuz looping an object gets complicated
-  paddlesObj = {};
+  paddles = [];
   hud = null;
 
   beginPlay() {
@@ -37,7 +36,6 @@ export class PongGameMode extends GameMode {
       new Paddle(PADDLES.RIGHT.POS, PADDLES.RIGHT.VEL, PADDLES.RIGHT.SIZE)
     );
     this.paddles = [paddleLeft, paddleRight];
-    this.paddlesObj = { left: paddleLeft, right: paddleRight };
 
     // HUD
     this.hud = this.world.spawn(new HUD({ x: CANVAS.WIDTH / 2, y: 40 }));
@@ -48,19 +46,7 @@ export class PongGameMode extends GameMode {
 
   onBallOut(side) {
     this.handleScore(side);
-
-    if (this.bIsGameOver()) {
-      this.gameSummary(side);
-
-      this.score = {
-        left: 0,
-        right: 0,
-      };
-
-      return;
-    }
-
-    this.ballReset(side);
+    this.bIsGameOver() ? this.onGameOver(side) : this.ballReset(side);
   }
 
   handleScore(side) {
@@ -80,8 +66,13 @@ export class PongGameMode extends GameMode {
     );
   }
 
-  gameSummary(side) {
+  onGameOver(side) {
     console.log('winner:', side === 'left' ? 'right paddle' : 'left paddle');
+
+    this.score = {
+      left: 0,
+      right: 0,
+    };
 
     this.ballReset(side);
   }

@@ -7,9 +7,5 @@ export class GameMode {
 
   tick(deltaTime) {}
 
-  bIsGameOver() {
-    return false;
-  }
-
-  gameSummary() {}
+  onGameOver() {}
 }

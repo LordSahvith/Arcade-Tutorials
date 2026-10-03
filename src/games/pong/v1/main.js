@@ -144,6 +144,10 @@ function updateAll() {
   }
 }
 
+/**
+ * RENDERING
+ */
+
 function drawAll(alpha = 1) {
   drawCourt();
   drawNet();
@@ -226,6 +230,10 @@ function drawCircle(pos = { x: 0, y: 0 }, radius, color) {
   ctx.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
   ctx.fill();
 }
+
+/**
+ * UPDATING
+ */
 
 function savePrevPositions() {
   for (const obj of [ball, paddle1, paddle2]) {
