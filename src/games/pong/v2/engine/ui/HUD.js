@@ -1,4 +1,4 @@
-import { Actor } from "../actors/Actor";
+import { Actor } from "../core/Actor";
 
 export class HUD extends Actor {
   /**
@@ -9,14 +9,5 @@ export class HUD extends Actor {
     super(pos, color);
   }
 
-  render(renderer) {
-    const { left, right } = this.world.gameMode.score;
-    renderer.drawText(
-      this.pos,
-      `${left} | ${right}`,
-      "25px monospace",
-      this.color,
-      "center",
-    );
-  }
+  render(renderer) {}
 }

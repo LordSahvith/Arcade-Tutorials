@@ -1,6 +1,6 @@
-import { Actor } from "../../engine/core/Actor";
+import { HUD as HUDBase } from "../../engine/ui/HUD";
 
-export class HUD extends Actor {
+export class HUD extends HUDBase {
   /**
    * @param {{x: number, y: number}} pos
    * @param {string} color
@@ -9,7 +9,7 @@ export class HUD extends Actor {
     super(pos, color);
   }
 
-  render(renderer) {
+  drawScore(renderer) {
     const { left, right } = this.world.gameMode.score;
     renderer.drawText(
       this.pos,
@@ -18,5 +18,9 @@ export class HUD extends Actor {
       this.color,
       "center",
     );
+  }
+
+  render(renderer) {
+    this.drawScore(renderer);
   }
 }
