@@ -298,6 +298,20 @@ function serveBall(bServeLeft) {
 }
 
 /**
+ * Moves the player's paddle based on held keys. Runs every fixed tick so
+ * movement is smooth and independent of the OS key-repeat rate.
+ */
+function movePlayerPaddle() {
+  let direction = 0;
+  if (keys.KeyW) direction -= 1;
+  if (keys.KeyS) direction += 1;
+
+  // current pos + direction (up/down) * paddle speed * fixed delta time (every tick)
+  const next = paddle1.pos.y + direction * paddle1.vel.y * FIXED_DELTA_TIME;
+  paddle1.pos.y = clamp(next, 0, canvas.height - paddle1.size.height);
+}
+
+/**
  * PHYSICS
  */
 
@@ -423,20 +437,6 @@ function onKeyDown(event) {
 
 function onKeyUp(event) {
   keys[event.code] = false;
-}
-
-/**
- * Moves the player's paddle based on held keys. Runs every fixed tick so
- * movement is smooth and independent of the OS key-repeat rate.
- */
-function movePlayerPaddle() {
-  let direction = 0;
-  if (keys.KeyW) direction -= 1;
-  if (keys.KeyS) direction += 1;
-
-  // current pos + direction (up/down) * paddle speed * fixed delta time (every tick)
-  const next = paddle1.pos.y + direction * paddle1.vel.y * FIXED_DELTA_TIME;
-  paddle1.pos.y = clamp(next, 0, canvas.height - paddle1.size.height);
 }
 
 /**
