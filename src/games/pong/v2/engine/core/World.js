@@ -21,6 +21,7 @@ export class World {
   tick(deltaTime) {
     for (const controller of this.controllers) controller.tick(deltaTime);
     for (const actor of this.actors) actor.tick(deltaTime);
+    this.gameMode?.tick(deltaTime);
   }
 
   render(alpha = 1) {

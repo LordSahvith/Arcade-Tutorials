@@ -18,7 +18,7 @@ export const MARGINS = {
 
 export const CANVAS = {
   WIDTH: 800,
-  HEIGHT: 600,
+  HEIGHT: 800 * (9 / 16),
 };
 
 export const GAME_DATA = {

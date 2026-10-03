@@ -54,6 +54,7 @@ export class WebInputManager {
   onKeyDown = event => {
     if (this.preventDefaultKeys.has(event.code)) event.preventDefault();
     this.pressedKeys.add(event.code);
+    console.log(this.pressedKeys);
   };
 
   onKeyUp = event => {

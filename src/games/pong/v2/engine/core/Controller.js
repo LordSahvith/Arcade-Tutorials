@@ -7,13 +7,11 @@ export class Controller {
   }
 
   beginPlay() {
-    console.log('controller');
+    console.log('controller::beginPlay()');
   }
 
   tick(deltaTime) {
-    if (!this.#possesed) return;
-
-    // this.produceCommand();
+    this.produceCommand();
   }
 
   possess(actor) {
@@ -21,6 +19,12 @@ export class Controller {
   }
 
   produceCommand() {
-    console.log('command');
+    const actor = this.#possesed;
+
+    if (!actor) return;
+
+    if (this.world.input.pressedKeys.has('KeyW')) {
+      actor.move();
+    }
   }
 }

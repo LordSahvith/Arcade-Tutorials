@@ -1,4 +1,4 @@
-import { Actor } from '../../engine/core/Actor';
+import { Actor } from '../../engine/core/actors/Actor';
 
 export class HUD extends Actor {
   /**

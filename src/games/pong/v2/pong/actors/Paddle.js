@@ -18,6 +18,10 @@ export class Paddle extends Actor {
     this.size = { ...size };
   }
 
+  move(deltaTime) {
+    this.pos.y += this.pos.y * this.vel.y * deltaTime;
+  }
+
   render(renderer, alpha) {
     renderer.drawRect(this.getRenderPos(alpha), this.size, this.color);
   }

@@ -5,6 +5,8 @@ export class GameMode {
 
   beginPlay() {}
 
+  tick(deltaTime) {}
+
   bIsGameOver() {
     return false;
   }
