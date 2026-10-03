@@ -10,7 +10,6 @@ export class Controller {
     if (!pawn) return;
 
     for (const command of this.produceCommands()) {
-      // console.log('controller::tick():', command);
       pawn.applyCommand(command);
     }
   }

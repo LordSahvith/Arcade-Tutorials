@@ -8,7 +8,7 @@ export class Court extends Actor {
    */
   constructor(pos, color = '#a800a8') {
     super(pos, color);
-    this.length = CANVAS.HEIGHT - pos.y * 2;
+    this.courtLength = CANVAS.HEIGHT - pos.y * 2;
     this.dash = MARGINS.SM;
     this.gap = MARGINS.SM;
     this.lineWidth = 3;
@@ -16,12 +16,12 @@ export class Court extends Actor {
 
   drawCourt(renderer) {
     const grad = renderer.ctx.createRadialGradient(
-      CANVAS.WIDTH / 2,
-      CANVAS.HEIGHT / 2,
+      this.world.renderer.width / 2,
+      this.world.renderer.height / 2,
       300, // end inner circle
-      CANVAS.WIDTH / 2,
-      CANVAS.HEIGHT / 2,
-      CANVAS.WIDTH // end outer circle
+      this.world.renderer.width / 2,
+      this.world.renderer.height / 2,
+      this.world.renderer.width // end outer circle
     );
 
     grad.addColorStop(0, 'black');
@@ -29,13 +29,13 @@ export class Court extends Actor {
 
     renderer.drawRect(
       { x: 0, y: 0 },
-      { width: CANVAS.WIDTH, height: CANVAS.HEIGHT },
+      { width: this.world.renderer.width, height: this.world.renderer.height },
       grad
     );
   }
 
   drawNet(renderer) {
-    const end = { x: this.pos.x, y: this.pos.y + this.length };
+    const end = { x: this.pos.x, y: this.pos.y + this.courtLength };
     renderer.drawLine(
       this.pos,
       end,

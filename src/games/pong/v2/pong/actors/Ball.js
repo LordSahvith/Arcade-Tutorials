@@ -1,5 +1,4 @@
 import { Actor } from '../../engine/core/actors/Actor';
-import { CANVAS } from '../config';
 
 export class Ball extends Actor {
   /**
@@ -15,7 +14,7 @@ export class Ball extends Actor {
   }
 
   beginPlay() {
-    // add circle component
+    // TODO: add circle component
   }
 
   tick(deltaTime) {
@@ -32,14 +31,17 @@ export class Ball extends Actor {
   }
 
   serve(dir) {
-    this.teleport({ x: CANVAS.WIDTH / 2, y: CANVAS.HEIGHT / 2 });
+    this.teleport({
+      x: this.world.renderer.width / 2,
+      y: this.world.renderer.height / 2,
+    });
     this.vel.x = dir * Math.abs(this.vel.x);
   }
 
   checkWallCollision() {
     // left / right: out of bounds, let GameMode score it
     if (this.pos.x + this.radius < 0) this.world.gameMode.onBallOut('left');
-    if (this.pos.x - this.radius > CANVAS.WIDTH)
+    if (this.pos.x - this.radius > this.world.renderer.width)
       this.world.gameMode.onBallOut('right');
 
     // top
@@ -49,8 +51,8 @@ export class Ball extends Actor {
     }
 
     // bottom
-    if (this.pos.y + this.radius > CANVAS.HEIGHT) {
-      this.pos.y = CANVAS.HEIGHT - this.radius; // nudge ball away
+    if (this.pos.y + this.radius > this.world.renderer.height) {
+      this.pos.y = this.world.renderer.height - this.radius; // nudge ball away
       this.vel.y = -Math.abs(this.vel.y); // always up (-1)
     }
   }

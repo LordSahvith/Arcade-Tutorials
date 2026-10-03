@@ -19,9 +19,12 @@ export class Paddle extends Pawn {
     this.size = { ...size };
   }
 
+  beginPlay() {
+    // TODO: add rect component
+  }
+
   applyMovement(deltaTime) {
-    const direction = clamp(this.inputY, -1, 1);
-    this.pos.y = this.pos.y + direction * this.vel.y * deltaTime;
+    this.pos.y = this.pos.y + this.inputY * this.vel.y * deltaTime;
     this.pos.y = clamp(
       this.pos.y,
       0,
