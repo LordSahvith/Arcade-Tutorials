@@ -1,5 +1,5 @@
 import { Pointer } from './Pointer';
-import { DEFAULT_KEYS } from './config';
+import { PREVENT_DEFAULT_KEYS } from './config';
 
 export class WebInputManager {
   pressedKeys = new Set();
@@ -7,7 +7,7 @@ export class WebInputManager {
   canvas = null;
   target = null;
 
-  constructor({ preventDefaultKeys = DEFAULT_KEYS } = {}) {
+  constructor({ preventDefaultKeys = PREVENT_DEFAULT_KEYS } = {}) {
     this.preventDefaultKeys = new Set(preventDefaultKeys);
   }
 
@@ -54,7 +54,6 @@ export class WebInputManager {
   onKeyDown = event => {
     if (this.preventDefaultKeys.has(event.code)) event.preventDefault();
     this.pressedKeys.add(event.code);
-    console.log(this.pressedKeys);
   };
 
   onKeyUp = event => {

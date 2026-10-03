@@ -1,6 +1,7 @@
-import { Actor } from '../../engine/core/Actor';
+import { Pawn } from '../../engine/core/actors/Pawn';
+import { clamp } from '../../engine/math/math';
 
-export class Paddle extends Actor {
+export class Paddle extends Pawn {
   /**
    * @param {{x: number, y: number}} pos
    * @param {{x: number, y: number}} vel
@@ -18,8 +19,14 @@ export class Paddle extends Actor {
     this.size = { ...size };
   }
 
-  move(deltaTime) {
-    this.pos.y += this.pos.y * this.vel.y * deltaTime;
+  applyMovement(deltaTime) {
+    const direction = clamp(this.inputY, -1, 1);
+    this.pos.y = this.pos.y + direction * this.vel.y * deltaTime;
+    this.pos.y = clamp(
+      this.pos.y,
+      0,
+      this.world.renderer.height - this.size.height
+    );
   }
 
   render(renderer, alpha) {

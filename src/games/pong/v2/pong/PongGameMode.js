@@ -1,5 +1,5 @@
 import { GameMode } from '../engine/core/GameMode';
-import { Controller } from '../engine/core/Controller';
+import { PlayerController } from './controllers/PlayerController';
 import { Court } from './actors/Court';
 import { Paddle } from './actors/Paddle';
 import { Ball } from './actors/Ball';
@@ -42,9 +42,8 @@ export class PongGameMode extends GameMode {
     // HUD
     this.hud = this.world.spawn(new HUD({ x: CANVAS.WIDTH / 2, y: 40 }));
 
-    if (this.world.input) {
-      this.world.addController(new Controller()).possess(paddleLeft);
-    }
+    // Controllers
+    this.world.addController(new PlayerController()).possess(paddleLeft);
   }
 
   onBallOut(side) {

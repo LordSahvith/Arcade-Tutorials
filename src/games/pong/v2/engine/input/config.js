@@ -1,6 +1,12 @@
-export const DEFAULT_KEYS = [
+export const PREVENT_DEFAULT_KEYS = [
   'ArrowUp',
   'ArrowDown',
+  'Space',
+  'Enter',
+  'Escape',
+];
+
+export const DEFAULT_GAME_KEYS = [
   'ArrowLeft',
   'ArrowRight',
   'KeyW',
@@ -8,7 +14,5 @@ export const DEFAULT_KEYS = [
   'KeyA',
   'KeyD',
   'KeyP',
-  'Space',
-  'Enter',
-  'Escape',
+  ...PREVENT_DEFAULT_KEYS,
 ];
