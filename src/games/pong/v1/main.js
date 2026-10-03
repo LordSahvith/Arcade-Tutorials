@@ -130,18 +130,6 @@ function update(now) {
   requestAnimationFrame(update);
 }
 
-function savePrevPositions() {
-  for (const obj of [ball, paddle1, paddle2]) {
-    // copy the values by assigning them directly,
-    // do NOT assign a reference like so: obj.prevPos = obj.pos
-    // either
-    // obj.prevPos.x = obj.pos.x;
-    // obj.prevPos.y = obj.pos.y;
-    // or
-    obj.prevPos = { ...obj.pos };
-  }
-}
-
 function updateAll() {
   savePrevPositions();
   moveAll();
@@ -156,17 +144,6 @@ function updateAll() {
   }
 }
 
-function lerp(valueA, valueB, alpha) {
-  return valueA + (valueB - valueA) * alpha;
-}
-
-function renderPos(obj, alpha) {
-  return {
-    x: lerp(obj.prevPos.x, obj.pos.x, alpha),
-    y: lerp(obj.prevPos.y, obj.pos.y, alpha),
-  };
-}
-
 function drawAll(alpha = 1) {
   drawCourt();
   drawNet();
@@ -175,6 +152,91 @@ function drawAll(alpha = 1) {
   drawRect(renderPos(paddle2, alpha), paddle2.size, "#d40000");
 
   drawScore();
+}
+
+function drawCourt() {
+  const grad = ctx.createRadialGradient(
+    canvas.width / 2,
+    canvas.height / 2,
+    300, // end inner circle
+    canvas.width / 2,
+    canvas.height / 2,
+    canvas.width, // end outer circle
+  );
+
+  grad.addColorStop(0, "black");
+  grad.addColorStop(1, "#a800a8");
+
+  ctx.fillStyle = grad;
+  drawRect(
+    { x: 0, y: 0 },
+    { width: canvas.width, height: canvas.height },
+    grad,
+  );
+}
+
+function drawNet() {
+  // Start a new path
+  ctx.beginPath();
+  ctx.setLineDash([CONSTANTS.canvas.margins.SM, CONSTANTS.canvas.margins.SM]); // 20px dash, 20px gap
+  // Move to the start point
+  ctx.moveTo(canvas.width / 2, CONSTANTS.canvas.margins.XS);
+  // Draw a line to the end point
+  ctx.lineTo(canvas.width / 2, canvas.height - CONSTANTS.canvas.margins.XS);
+  // Set line style
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = "#a800a8";
+  // Draw the path
+  ctx.stroke();
+}
+
+function drawScore() {
+  ctx.font = "25px monospace";
+  ctx.fillStyle = "#eeeeee";
+  ctx.textAlign = "center";
+  ctx.fillText(`${score.player1}   ${score.player2}`, canvas.width / 2, 40);
+}
+
+/**
+ * Creates a Rectangle
+ *
+ * @param {Object} pos
+ * @param {Object} size
+ * @param {String} color
+ */
+function drawRect(
+  pos = { x: 0, y: 0 },
+  size = { width: canvas.width, height: canvas.height },
+  color = "black",
+) {
+  ctx.fillStyle = color;
+  ctx.fillRect(pos.x, pos.y, size.width, size.height);
+}
+
+/**
+ * Creates a Circle
+ *
+ * @param {Object} pos
+ * @param {Number} radius
+ * @param {String} color
+ */
+function drawCircle(pos = { x: 0, y: 0 }, radius, color) {
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function savePrevPositions() {
+  for (const obj of [ball, paddle1, paddle2]) {
+    // copy the values by assigning them directly,
+    // do NOT assign a reference like so: obj.prevPos = obj.pos
+    // either
+    // obj.prevPos.x = obj.pos.x;
+    // obj.prevPos.y = obj.pos.y;
+    // or
+    obj.prevPos = { ...obj.pos };
+  }
 }
 
 function moveAll() {
@@ -190,35 +252,11 @@ function moveAll() {
   paddleCollision(paddle2, false);
 }
 
-function requireCanvas() {
-  const canvas = document.querySelector("#gameCanvas");
-  if (!canvas) throw new Error("#gameCanvas canvas not found");
-
-  canvas.width = CONSTANTS.canvas.size.width;
-  canvas.height = CONSTANTS.canvas.size.height;
-
-  return canvas;
-}
-
-function requireRenderingContext(canvas) {
-  const canvasRenderingContext = canvas.getContext("2d");
-  if (!canvasRenderingContext) throw new Error("canvas context not found");
-  return canvasRenderingContext;
-}
-
-function randRange(min = 0, max = 1) {
-  return Math.random() * (max - min) + min;
-}
-
-function getRandServeDirection() {
-  return randRange() < 0.5;
-}
-
-function getRandServeLocation() {
-  return randRange(
-    CONSTANTS.canvas.margins.LG,
-    canvas.height - CONSTANTS.canvas.margins.LG,
-  );
+function renderPos(obj, alpha) {
+  return {
+    x: lerp(obj.prevPos.x, obj.pos.x, alpha),
+    y: lerp(obj.prevPos.y, obj.pos.y, alpha),
+  };
 }
 
 function paddleAI(paddle) {
@@ -260,17 +298,8 @@ function serveBall(bServeLeft) {
 }
 
 /**
- * Checks if two 1D ranges [minA, maxA] and [minB, maxB] overlap
- *
- * @param {Number} minA
- * @param {Number} maxA
- * @param {Number} minB
- * @param {Number} maxB
- * @returns {Boolean}
+ * PHYSICS
  */
-function rangesOverlap(minA, maxA, minB, maxB) {
-  return minA < maxB && maxA > minB;
-}
 
 /**
  * Handles collision between paddle and ball. Checks whether the ball's
@@ -359,79 +388,6 @@ function wallCollision() {
   }
 }
 
-function drawCourt() {
-  const grad = ctx.createRadialGradient(
-    canvas.width / 2,
-    canvas.height / 2,
-    300, // end inner circle
-    canvas.width / 2,
-    canvas.height / 2,
-    canvas.width, // end outer circle
-  );
-
-  grad.addColorStop(0, "black");
-  grad.addColorStop(1, "#a800a8");
-
-  ctx.fillStyle = grad;
-  drawRect(
-    { x: 0, y: 0 },
-    { width: canvas.width, height: canvas.height },
-    grad,
-  );
-}
-
-function drawNet() {
-  // Start a new path
-  ctx.beginPath();
-  ctx.setLineDash([CONSTANTS.canvas.margins.SM, CONSTANTS.canvas.margins.SM]); // 20px dash, 20px gap
-  // Move to the start point
-  ctx.moveTo(canvas.width / 2, CONSTANTS.canvas.margins.XS);
-  // Draw a line to the end point
-  ctx.lineTo(canvas.width / 2, canvas.height - CONSTANTS.canvas.margins.XS);
-  // Set line style
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = "#a800a8";
-  // Draw the path
-  ctx.stroke();
-}
-
-function drawScore() {
-  ctx.font = "25px monospace";
-  ctx.fillStyle = "#eeeeee";
-  ctx.textAlign = "center";
-  ctx.fillText(`${score.player1}   ${score.player2}`, canvas.width / 2, 40);
-}
-
-/**
- * Creates a Rectangle
- *
- * @param {Object} pos
- * @param {Object} size
- * @param {String} color
- */
-function drawRect(
-  pos = { x: 0, y: 0 },
-  size = { width: canvas.width, height: canvas.height },
-  color = "black",
-) {
-  ctx.fillStyle = color;
-  ctx.fillRect(pos.x, pos.y, size.width, size.height);
-}
-
-/**
- * Creates a Circle
- *
- * @param {Object} pos
- * @param {Number} radius
- * @param {String} color
- */
-function drawCircle(pos = { x: 0, y: 0 }, radius, color) {
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
-  ctx.fill();
-}
-
 function calculateMousePos(event) {
   let rect = canvas.getBoundingClientRect();
   let root = document.documentElement;
@@ -444,6 +400,10 @@ function calculateMousePos(event) {
     y: mouseY,
   };
 }
+
+/**
+ * INPUT
+ */
 
 function updatePaddlePos(event) {
   const pos = calculateMousePos(event);
@@ -480,6 +440,43 @@ function movePlayerPaddle() {
 }
 
 /**
+ * HELPER FUNCTIONS
+ */
+
+function requireCanvas() {
+  const canvas = document.querySelector("#gameCanvas");
+  if (!canvas) throw new Error("#gameCanvas canvas not found");
+
+  canvas.width = CONSTANTS.canvas.size.width;
+  canvas.height = CONSTANTS.canvas.size.height;
+
+  return canvas;
+}
+
+function requireRenderingContext(canvas) {
+  const canvasRenderingContext = canvas.getContext("2d");
+  if (!canvasRenderingContext) throw new Error("canvas context not found");
+  return canvasRenderingContext;
+}
+
+/**
+ * Checks if two 1D ranges [minA, maxA] and [minB, maxB] overlap
+ *
+ * @param {Number} minA
+ * @param {Number} maxA
+ * @param {Number} minB
+ * @param {Number} maxB
+ * @returns {Boolean}
+ */
+function rangesOverlap(minA, maxA, minB, maxB) {
+  return minA < maxB && maxA > minB;
+}
+
+function lerp(valueA, valueB, alpha) {
+  return valueA + (valueB - valueA) * alpha;
+}
+
+/**
  * Constrain `value` to the inclusive range [min, max].
  *
  * @param {Number} value
@@ -489,6 +486,21 @@ function movePlayerPaddle() {
  */
 function clamp(value, min, max) {
   return value < min ? min : value > max ? max : value;
+}
+
+function randRange(min = 0, max = 1) {
+  return Math.random() * (max - min) + min;
+}
+
+function getRandServeDirection() {
+  return randRange() < 0.5;
+}
+
+function getRandServeLocation() {
+  return randRange(
+    CONSTANTS.canvas.margins.LG,
+    canvas.height - CONSTANTS.canvas.margins.LG,
+  );
 }
 
 window.onload = startGame;
