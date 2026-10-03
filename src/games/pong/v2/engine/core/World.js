@@ -1,7 +1,7 @@
 export class World {
   /**
    * @param {Game} game
-   * @param {GameMode} GameModeClass
+   * @param {typeof GameMode} GameModeClass
    */
   constructor(game, GameModeClass) {
     this.game = game;
@@ -13,13 +13,11 @@ export class World {
   }
 
   beginPlay() {
-    this.input.attach(window, this.renderer.canvas);
     this.gameMode.beginPlay();
   }
 
   tick(deltaTime) {
     for (const actor of this.actors) actor.tick(deltaTime);
-    this.input.endTick();
   }
 
   render(alpha = 1) {
@@ -27,12 +25,12 @@ export class World {
     for (const actor of this.actors) actor.render(this.renderer, alpha);
   }
 
-  spawn(obj) {
-    obj.id = this.nextId++;
-    obj.world = this;
-    this.actors.push(obj);
-    obj.beginPlay();
+  spawn(actor) {
+    actor.id = this.nextId++;
+    actor.world = this;
+    this.actors.push(actor);
+    actor.beginPlay();
 
-    return obj;
+    return actor;
   }
 }

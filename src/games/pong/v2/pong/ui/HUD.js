@@ -1,11 +1,11 @@
-import { HUD as HUDBase } from "../../engine/ui/HUD";
+import { Actor } from '../../engine/core/Actor';
 
-export class HUD extends HUDBase {
+export class HUD extends Actor {
   /**
    * @param {{x: number, y: number}} pos
    * @param {string} color
    */
-  constructor(pos, color = "white") {
+  constructor(pos, color = 'white') {
     super(pos, color);
   }
 
@@ -14,9 +14,9 @@ export class HUD extends HUDBase {
     renderer.drawText(
       this.pos,
       `${left} | ${right}`,
-      "25px monospace",
+      '25px monospace',
       this.color,
-      "center",
+      'center'
     );
   }
 

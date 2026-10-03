@@ -1,4 +1,4 @@
-import { lerp } from "../math/math";
+import { lerp } from '../math/math';
 
 export class Actor {
   /**
@@ -7,7 +7,7 @@ export class Actor {
    * @param {{x: number, y: number}} pos
    * @param {string} color
    */
-  constructor(pos, color = "white") {
+  constructor(pos, color = 'white') {
     this.pos = { ...pos };
     this.prevPos = { ...pos };
     this.color = color;

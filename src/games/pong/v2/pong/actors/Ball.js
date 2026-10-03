@@ -1,5 +1,5 @@
-import { Actor } from "../../engine/core/Actor";
-import { CANVAS } from "../config";
+import { Actor } from '../../engine/core/Actor';
+import { CANVAS } from '../config';
 
 export class Ball extends Actor {
   /**
@@ -8,7 +8,7 @@ export class Ball extends Actor {
    * @param {number} radius
    * @param {string} color
    */
-  constructor(pos, vel = { x: 200, y: 50 }, radius = 10, color = "red") {
+  constructor(pos, vel = { x: 200, y: 50 }, radius = 10, color = 'red') {
     super(pos, color);
     this.vel = { ...vel };
     this.radius = radius;
@@ -38,9 +38,9 @@ export class Ball extends Actor {
 
   checkWallCollision() {
     // left / right: out of bounds, let GameMode score it
-    if (this.pos.x + this.radius < 0) this.world.gameMode.onBallOut("left");
+    if (this.pos.x + this.radius < 0) this.world.gameMode.onBallOut('left');
     if (this.pos.x - this.radius > CANVAS.WIDTH)
-      this.world.gameMode.onBallOut("right");
+      this.world.gameMode.onBallOut('right');
 
     // top
     if (this.pos.y - this.radius < 0) {

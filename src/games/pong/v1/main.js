@@ -100,11 +100,11 @@ function startGame() {
   canvas = requireCanvas();
   ctx = requireRenderingContext(canvas);
 
-  canvas.addEventListener("mousemove", updatePaddlePos);
-  document.addEventListener("keydown", onKeyDown);
-  document.addEventListener("keyup", onKeyUp);
+  canvas.addEventListener('mousemove', updatePaddlePos);
+  document.addEventListener('keydown', onKeyDown);
+  document.addEventListener('keyup', onKeyUp);
   // clear held keys if the window loses focus, otherwise the paddle keeps moving
-  window.addEventListener("blur", () => {
+  window.addEventListener('blur', () => {
     for (const code in keys) keys[code] = false;
   });
 
@@ -135,7 +135,7 @@ function updateAll() {
   moveAll();
 
   if (score.player1 === 7 || score.player2 === 7) {
-    console.log("game over!");
+    console.log('game over!');
 
     score.player1 = 0;
     score.player2 = 0;
@@ -147,9 +147,9 @@ function updateAll() {
 function drawAll(alpha = 1) {
   drawCourt();
   drawNet();
-  drawCircle(renderPos(ball, alpha), ball.radius, "#d40000");
-  drawRect(renderPos(paddle1, alpha), paddle1.size, "#d40000");
-  drawRect(renderPos(paddle2, alpha), paddle2.size, "#d40000");
+  drawCircle(renderPos(ball, alpha), ball.radius, '#d40000');
+  drawRect(renderPos(paddle1, alpha), paddle1.size, '#d40000');
+  drawRect(renderPos(paddle2, alpha), paddle2.size, '#d40000');
 
   drawScore();
 }
@@ -161,17 +161,17 @@ function drawCourt() {
     300, // end inner circle
     canvas.width / 2,
     canvas.height / 2,
-    canvas.width, // end outer circle
+    canvas.width // end outer circle
   );
 
-  grad.addColorStop(0, "black");
-  grad.addColorStop(1, "#a800a8");
+  grad.addColorStop(0, 'black');
+  grad.addColorStop(1, '#a800a8');
 
   ctx.fillStyle = grad;
   drawRect(
     { x: 0, y: 0 },
     { width: canvas.width, height: canvas.height },
-    grad,
+    grad
   );
 }
 
@@ -185,15 +185,15 @@ function drawNet() {
   ctx.lineTo(canvas.width / 2, canvas.height - CONSTANTS.canvas.margins.XS);
   // Set line style
   ctx.lineWidth = 3;
-  ctx.strokeStyle = "#a800a8";
+  ctx.strokeStyle = '#a800a8';
   // Draw the path
   ctx.stroke();
 }
 
 function drawScore() {
-  ctx.font = "25px monospace";
-  ctx.fillStyle = "#eeeeee";
-  ctx.textAlign = "center";
+  ctx.font = '25px monospace';
+  ctx.fillStyle = '#eeeeee';
+  ctx.textAlign = 'center';
   ctx.fillText(`${score.player1}   ${score.player2}`, canvas.width / 2, 40);
 }
 
@@ -207,7 +207,7 @@ function drawScore() {
 function drawRect(
   pos = { x: 0, y: 0 },
   size = { width: canvas.width, height: canvas.height },
-  color = "black",
+  color = 'black'
 ) {
   ctx.fillStyle = color;
   ctx.fillRect(pos.x, pos.y, size.width, size.height);
@@ -335,7 +335,7 @@ function paddleCollision(paddle, bIsLeft = true) {
     paddle.pos.y,
     paddle.pos.y + paddle.size.height,
     hitY - ball.radius,
-    hitY + ball.radius,
+    hitY + ball.radius
   );
   if (!hitPaddle) return;
 
@@ -347,12 +347,12 @@ function paddleCollision(paddle, bIsLeft = true) {
   const offset = clamp(
     (hitY - paddleCenterY) / (paddle.size.height / 2),
     -1,
-    1,
+    1
   );
   const angle = offset * ball.maxBounceAngle;
   const speed = Math.min(
     Math.hypot(ball.vel.x, ball.vel.y) * ball.speedUp,
-    ball.maxSpeed,
+    ball.maxSpeed
   );
 
   const dir = bIsLeft ? 1 : -1;
@@ -411,7 +411,7 @@ function updatePaddlePos(event) {
   pos.y = clamp(
     pos.y - paddle1.size.height / 2,
     0,
-    canvas.height - paddle1.size.height,
+    canvas.height - paddle1.size.height
   );
 
   paddle1.pos = pos;
@@ -444,8 +444,8 @@ function movePlayerPaddle() {
  */
 
 function requireCanvas() {
-  const canvas = document.querySelector("#gameCanvas");
-  if (!canvas) throw new Error("#gameCanvas canvas not found");
+  const canvas = document.querySelector('#gameCanvas');
+  if (!canvas) throw new Error('#gameCanvas canvas not found');
 
   canvas.width = CONSTANTS.canvas.size.width;
   canvas.height = CONSTANTS.canvas.size.height;
@@ -454,8 +454,8 @@ function requireCanvas() {
 }
 
 function requireRenderingContext(canvas) {
-  const canvasRenderingContext = canvas.getContext("2d");
-  if (!canvasRenderingContext) throw new Error("canvas context not found");
+  const canvasRenderingContext = canvas.getContext('2d');
+  if (!canvasRenderingContext) throw new Error('canvas context not found');
   return canvasRenderingContext;
 }
 
@@ -499,7 +499,7 @@ function getRandServeDirection() {
 function getRandServeLocation() {
   return randRange(
     CONSTANTS.canvas.margins.LG,
-    canvas.height - CONSTANTS.canvas.margins.LG,
+    canvas.height - CONSTANTS.canvas.margins.LG
   );
 }
 

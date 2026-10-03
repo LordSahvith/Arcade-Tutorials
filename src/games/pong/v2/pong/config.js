@@ -80,3 +80,5 @@ export const PADDLES = {
     },
   },
 };
+
+export const GAME_KEYS = ['ArrowUp', 'ArrowDown', 'Space'];

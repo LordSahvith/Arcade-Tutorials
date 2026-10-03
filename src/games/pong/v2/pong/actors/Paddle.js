@@ -1,4 +1,4 @@
-import { Actor } from "../../engine/core/Actor";
+import { Actor } from '../../engine/core/Actor';
 
 export class Paddle extends Actor {
   /**
@@ -11,7 +11,7 @@ export class Paddle extends Actor {
     pos,
     vel = { x: 0, y: 420 },
     size = { width: 20, height: 90 },
-    color = "red",
+    color = 'red'
   ) {
     super(pos, color);
     this.vel = { ...vel };

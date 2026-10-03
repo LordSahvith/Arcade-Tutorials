@@ -5,7 +5,9 @@ export class GameMode {
 
   beginPlay() {}
 
-  bIsGameOver() {}
+  bIsGameOver() {
+    return false;
+  }
 
   gameSummary() {}
 }

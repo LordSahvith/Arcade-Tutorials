@@ -1,13 +1,12 @@
-// Net.js
-import { Actor } from "../../engine/core/Actor";
-import { CANVAS, MARGINS } from "../config";
+import { Actor } from '../../engine/core/Actor';
+import { CANVAS, MARGINS } from '../config';
 
 export class Court extends Actor {
   /**
    * @param {{x: number, y: number}} pos top of the net
    * @param {string} color
    */
-  constructor(pos, color = "#a800a8") {
+  constructor(pos, color = '#a800a8') {
     super(pos, color);
     this.length = CANVAS.HEIGHT - pos.y * 2;
     this.dash = MARGINS.SM;
@@ -22,16 +21,16 @@ export class Court extends Actor {
       300, // end inner circle
       CANVAS.WIDTH / 2,
       CANVAS.HEIGHT / 2,
-      CANVAS.WIDTH, // end outer circle
+      CANVAS.WIDTH // end outer circle
     );
 
-    grad.addColorStop(0, "black");
-    grad.addColorStop(1, "#a800a8");
+    grad.addColorStop(0, 'black');
+    grad.addColorStop(1, '#a800a8');
 
     renderer.drawRect(
       { x: 0, y: 0 },
       { width: CANVAS.WIDTH, height: CANVAS.HEIGHT },
-      grad,
+      grad
     );
   }
 
@@ -43,7 +42,7 @@ export class Court extends Actor {
       this.dash,
       this.gap,
       this.lineWidth,
-      this.color,
+      this.color
     );
   }
 
