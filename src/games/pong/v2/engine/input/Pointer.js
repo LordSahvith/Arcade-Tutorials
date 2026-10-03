@@ -3,14 +3,12 @@
  * it during tick(), and endTick() rolls it over for the next tick.
  */
 export class Pointer {
-  constructor() {
-    this.move = { pos: { x: 0, y: 0 }, prevPos: { x: 0, y: 0 } };
-    this.click = { pos: { x: 0, y: 0 }, prevPos: { x: 0, y: 0 } };
-    this.bIsHeld = false;
-    this.bWasPressed = false;
-    this.bWasReleased = false;
-    this.bFirstMove = true;
-  }
+  move = { pos: { x: 0, y: 0 }, prevPos: { x: 0, y: 0 } };
+  click = { pos: { x: 0, y: 0 }, prevPos: { x: 0, y: 0 } };
+  bIsHeld = false;
+  bWasPressed = false;
+  bWasReleased = false;
+  #bFirstMove = true;
 
   /** Movement since the last tick. */
   get delta() {
@@ -24,11 +22,11 @@ export class Pointer {
     this.move.pos.x = x;
     this.move.pos.y = y;
 
-    if (!this.bFirstMove) return;
+    if (!this.#bFirstMove) return;
 
     this.move.prevPos.x = x;
     this.move.prevPos.y = y;
-    this.bFirstMove = false;
+    this.#bFirstMove = false;
   }
 
   setClickPos(x, y) {
@@ -38,7 +36,7 @@ export class Pointer {
     this.click.pos.y = y;
   }
 
-  onPressed(x, y) {
+  onClicked(x, y) {
     this.setMovePos(x, y);
     this.setClickPos(x, y);
     this.bIsHeld = true;

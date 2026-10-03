@@ -2,11 +2,13 @@ import { Pointer } from './Pointer';
 import { DEFAULT_KEYS } from './config';
 
 export class WebInputManager {
+  pressedKeys = new Set();
+  pointer = new Pointer();
+  canvas = null;
+  target = null;
+
   constructor({ preventDefaultKeys = DEFAULT_KEYS } = {}) {
     this.preventDefaultKeys = new Set(preventDefaultKeys);
-    this.pressedKeys = new Set();
-    this.pointer = new Pointer();
-    this.canvas = null;
   }
 
   attach(target = window, canvas) {
@@ -77,7 +79,7 @@ export class WebInputManager {
   onPointerDown = event => {
     this.canvas.setPointerCapture(event.pointerId);
     const { x, y } = this.toCanvasPos(event);
-    this.pointer.onPressed(x, y);
+    this.pointer.onClicked(x, y);
   };
 
   onPointerCancel = () => {

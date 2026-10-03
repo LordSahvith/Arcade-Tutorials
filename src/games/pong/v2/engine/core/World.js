@@ -1,4 +1,8 @@
 export class World {
+  #nextId = 0;
+  actors = [];
+  controllers = [];
+
   /**
    * @param {Game} game
    * @param {typeof GameMode} GameModeClass
@@ -8,8 +12,6 @@ export class World {
     this.renderer = game.renderer;
     this.input = game.input;
     this.gameMode = new GameModeClass(this);
-    this.actors = [];
-    this.nextId = 0;
   }
 
   beginPlay() {
@@ -17,6 +19,7 @@ export class World {
   }
 
   tick(deltaTime) {
+    for (const controller of this.controllers) controller.tick(deltaTime);
     for (const actor of this.actors) actor.tick(deltaTime);
   }
 
@@ -26,11 +29,20 @@ export class World {
   }
 
   spawn(actor) {
-    actor.id = this.nextId++;
+    actor.id = this.#nextId++;
     actor.world = this;
     this.actors.push(actor);
     actor.beginPlay();
 
     return actor;
+  }
+
+  addController(controller) {
+    controller.world = this;
+
+    this.controllers.push(controller);
+    controller.beginPlay();
+
+    return controller;
   }
 }

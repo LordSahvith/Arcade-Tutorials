@@ -1,23 +1,26 @@
 import { GameMode } from '../engine/core/GameMode';
-import { CANVAS, BALL, MARGINS, PADDLES, GAME_DATA } from './config';
+import { Controller } from '../engine/core/Controller';
 import { Court } from './actors/Court';
 import { Paddle } from './actors/Paddle';
 import { Ball } from './actors/Ball';
 import { HUD } from './ui/HUD';
+import { CANVAS, BALL, MARGINS, PADDLES, GAME_DATA } from './config';
 
 export class PongGameMode extends GameMode {
-  constructor(world) {
-    super(world);
-    this.score = {
-      left: 0,
-      right: 0,
-    };
-  }
+  score = { left: 0, right: 0 };
+  court = null;
+  ball = null;
+  paddles = []; // cuz looping an object gets complicated
+  paddlesObj = {};
+  hud = null;
 
   beginPlay() {
+    // Court
     this.court = this.world.spawn(
       new Court({ x: CANVAS.WIDTH / 2, y: MARGINS.XS })
     );
+
+    // Ball
     this.ball = this.world.spawn(
       new Ball(
         { x: BALL.POS.X, y: BALL.POS.Y },
@@ -25,13 +28,23 @@ export class PongGameMode extends GameMode {
         BALL.RADIUS
       )
     );
-    this.paddleLeft = this.world.spawn(
+
+    // Paddles
+    const paddleLeft = this.world.spawn(
       new Paddle(PADDLES.LEFT.POS, PADDLES.LEFT.VEL, PADDLES.LEFT.SIZE)
     );
-    this.paddleRight = this.world.spawn(
+    const paddleRight = this.world.spawn(
       new Paddle(PADDLES.RIGHT.POS, PADDLES.RIGHT.VEL, PADDLES.RIGHT.SIZE)
     );
+    this.paddles = [paddleLeft, paddleRight];
+    this.paddlesObj = { left: paddleLeft, right: paddleRight };
+
+    // HUD
     this.hud = this.world.spawn(new HUD({ x: CANVAS.WIDTH / 2, y: 40 }));
+
+    if (this.world.input) {
+      this.world.addController(new Controller()).possess(paddleLeft);
+    }
   }
 
   onBallOut(side) {

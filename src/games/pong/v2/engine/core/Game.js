@@ -3,6 +3,9 @@ import { WebInputManager } from '../input/WebInputManager';
 import { World } from './World';
 
 export class Game {
+  #accumulator = 0;
+  #lastTime = performance.now();
+
   constructor({
     canvasId,
     size,
@@ -17,8 +20,6 @@ export class Game {
 
     this.FIXED_DELTA_TIME = 1 / tickRate;
     this.maxFrameTime = maxFrameTime;
-    this.accumulator = 0;
-    this.lastTime = performance.now();
   }
 
   run() {
@@ -28,20 +29,20 @@ export class Game {
   }
 
   loop = now => {
-    let deltaTime = (now - this.lastTime) / 1000;
-    this.lastTime = now;
+    let deltaTime = (now - this.#lastTime) / 1000;
+    this.#lastTime = now;
 
     if (deltaTime > this.maxFrameTime) deltaTime = this.maxFrameTime;
 
-    this.accumulator += deltaTime;
+    this.#accumulator += deltaTime;
 
-    while (this.accumulator >= this.FIXED_DELTA_TIME) {
+    while (this.#accumulator >= this.FIXED_DELTA_TIME) {
       this.world.tick(this.FIXED_DELTA_TIME);
       this.input.endTick();
-      this.accumulator -= this.FIXED_DELTA_TIME;
+      this.#accumulator -= this.FIXED_DELTA_TIME;
     }
 
-    const alpha = this.accumulator / this.FIXED_DELTA_TIME;
+    const alpha = this.#accumulator / this.FIXED_DELTA_TIME;
     this.world.render(alpha);
     requestAnimationFrame(this.loop);
   };

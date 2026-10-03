@@ -1,6 +1,9 @@
 import { lerp } from '../math/math';
 
 export class Actor {
+  id = null;
+  world = null;
+
   /**
    * Parameter objects should always be in lowercase
    * e.g. pos.x, not pos.X
