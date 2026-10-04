@@ -1,4 +1,5 @@
 import { Actor } from '../../engine/core/actors/Actor';
+import { CircleComponent } from '../../engine/core/components/CircleComponent';
 
 export class Ball extends Actor {
   /**
@@ -6,15 +7,26 @@ export class Ball extends Actor {
    * @param {{x: number, y: number}} vel
    * @param {number} radius
    * @param {string} color
+   * @param {Array typeof Paddle} paddles
    */
-  constructor(pos, vel = { x: 200, y: 50 }, radius = 10, color = 'red') {
+  constructor({
+    pos,
+    vel = { x: 200, y: 50 },
+    radius = 10,
+    color = 'red',
+    paddles = [],
+  }) {
     super(pos, color);
     this.vel = { ...vel };
     this.radius = radius;
+    this.paddles = paddles;
   }
 
   beginPlay() {
-    // TODO: add circle component
+    this.shape = this.addComponent(
+      new CircleComponent(this.radius, this.color)
+    );
+    super.beginPlay();
   }
 
   tick(deltaTime) {
@@ -24,10 +36,6 @@ export class Ball extends Actor {
     this.pos.y += this.vel.y * deltaTime;
 
     this.checkWallCollision();
-  }
-
-  render(renderer, alpha) {
-    renderer.drawCircle(this.getRenderPos(alpha), this.radius, this.color);
   }
 
   serve(dir) {

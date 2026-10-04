@@ -3,6 +3,7 @@ import { lerp } from '../../math/math';
 export class Actor {
   id = null;
   world = null;
+  components = [];
 
   /**
    * Parameter objects should always be in lowercase
@@ -16,7 +17,9 @@ export class Actor {
     this.color = color;
   }
 
-  beginPlay() {}
+  beginPlay() {
+    for (const component of this.components) component.beginPlay();
+  }
 
   /**
    * Saves prevPos for render interpolation. Subclasses that move must call
@@ -25,9 +28,12 @@ export class Actor {
   tick(deltaTime) {
     this.prevPos.x = this.pos.x;
     this.prevPos.y = this.pos.y;
+    for (const component of this.components) component.tick(deltaTime);
   }
 
-  render(renderer, alpha) {}
+  render(renderer, alpha) {
+    for (const component of this.components) component.render(renderer, alpha);
+  }
 
   endPlay() {}
 
@@ -46,5 +52,11 @@ export class Actor {
     this.pos.y = pos.y;
     this.prevPos.x = pos.x; // set prevPos to new pos to keep from
     this.prevPos.y = pos.y; // interpolating between the two next render()
+  }
+
+  addComponent(component) {
+    component.owner = this;
+    this.components.push(component);
+    return component;
   }
 }

@@ -1,5 +1,5 @@
 import { Actor } from '../../engine/core/actors/Actor';
-import { CANVAS, MARGINS } from '../config';
+import { MARGINS } from '../config';
 
 export class Court extends Actor {
   /**
@@ -8,7 +8,6 @@ export class Court extends Actor {
    */
   constructor(pos, color = '#a800a8') {
     super(pos, color);
-    this.courtLength = CANVAS.HEIGHT - pos.y * 2;
     this.dash = MARGINS.SM;
     this.gap = MARGINS.SM;
     this.lineWidth = 3;
@@ -35,7 +34,8 @@ export class Court extends Actor {
   }
 
   drawNet(renderer) {
-    const end = { x: this.pos.x, y: this.pos.y + this.courtLength };
+    const courtLength = this.world.renderer.height - this.pos.y * 2;
+    const end = { x: this.pos.x, y: this.pos.y + courtLength };
     renderer.drawLine(
       this.pos,
       end,

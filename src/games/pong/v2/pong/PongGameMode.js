@@ -20,23 +20,14 @@ export class PongGameMode extends GameMode {
       new Court({ x: CANVAS.WIDTH / 2, y: MARGINS.XS })
     );
 
-    // Ball
-    this.ball = this.world.spawn(
-      new Ball(
-        { x: BALL.POS.X, y: BALL.POS.Y },
-        { x: BALL.VEL.X, y: BALL.VEL.Y },
-        BALL.RADIUS
-      )
-    );
-
     // Paddles
-    const paddleLeft = this.world.spawn(
-      new Paddle(PADDLES.LEFT.POS, PADDLES.LEFT.VEL, PADDLES.LEFT.SIZE)
-    );
-    const paddleRight = this.world.spawn(
-      new Paddle(PADDLES.RIGHT.POS, PADDLES.RIGHT.VEL, PADDLES.RIGHT.SIZE)
-    );
+    const paddleLeft = this.world.spawn(new Paddle(PADDLES.LEFT));
+    const paddleRight = this.world.spawn(new Paddle(PADDLES.RIGHT));
     this.paddles = [paddleLeft, paddleRight];
+
+    // Ball
+    // PongGameMode
+    this.ball = this.world.spawn(new Ball({ ...BALL, paddles: this.paddles }));
 
     // HUD
     this.hud = this.world.spawn(new HUD({ x: CANVAS.WIDTH / 2, y: 40 }));
