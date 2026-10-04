@@ -1,5 +1,6 @@
 import { GameMode } from '../engine/core/GameMode';
 import { PlayerController } from './controllers/PlayerController';
+import { AIController } from './controllers/AIController';
 import { Court } from './actors/Court';
 import { Paddle } from './actors/Paddle';
 import { Ball } from './actors/Ball';
@@ -42,6 +43,7 @@ export class PongGameMode extends GameMode {
 
     // Controllers
     this.world.addController(new PlayerController()).possess(paddleLeft);
+    this.world.addController(new AIController(this.ball)).possess(paddleRight);
   }
 
   onBallOut(side) {

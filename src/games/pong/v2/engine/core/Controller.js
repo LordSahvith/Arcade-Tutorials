@@ -2,6 +2,10 @@ export class Controller {
   world = null;
   #possessed = null;
 
+  get pawn() {
+    return this.#possessed;
+  }
+
   beginPlay() {}
 
   tick(deltaTime) {
@@ -10,7 +14,7 @@ export class Controller {
     if (!pawn) return;
 
     for (const command of this.produceCommands()) {
-      this.world.commands.record(pawn.id, command);
+      this.world.commands.record(this.world.tickCount, pawn.id, command);
       command.execute(pawn);
     }
   }

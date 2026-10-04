@@ -4,6 +4,7 @@ export class World {
   #nextId = 0;
   actors = [];
   controllers = [];
+  tickCount = 0;
 
   /**
    * @param {Game} game
@@ -22,6 +23,7 @@ export class World {
   }
 
   tick(deltaTime) {
+    this.tickCount++;
     for (const controller of this.controllers) controller.tick(deltaTime);
     for (const actor of this.actors) actor.tick(deltaTime);
     this.gameMode.tick(deltaTime);

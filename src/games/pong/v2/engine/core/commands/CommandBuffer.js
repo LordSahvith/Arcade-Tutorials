@@ -1,12 +1,21 @@
 export class CommandBuffer {
   entries = [];
 
-  record(actorId, command) {
-    this.entries.push({ actorId, command });
-    console.log(this.entries);
+  constructor(maxEntries = 3600) {
+    // about a minute at 60 ticks for one pawn
+    this.maxEntries = maxEntries;
   }
 
-  get length() {
-    return this.entries.length;
+  record(tick, actorId, command) {
+    this.entries.push({ tick, actorId, command });
+    if (this.entries.length > this.maxEntries) this.entries.shift();
+  }
+
+  clear() {
+    this.entries.length = 0;
+  }
+
+  toJSON() {
+    return { type: 'move', x: this.x, y: this.y };
   }
 }
