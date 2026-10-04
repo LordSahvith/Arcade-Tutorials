@@ -24,7 +24,8 @@ export class Paddle extends Pawn {
   }
 
   applyMovement(deltaTime) {
-    this.pos.y = this.pos.y + this.inputY * this.vel.y * deltaTime;
+    const dir = clamp(this.inputY, -1, 1);
+    this.pos.y += dir * this.vel.y * deltaTime;
     this.pos.y = clamp(
       this.pos.y,
       0,

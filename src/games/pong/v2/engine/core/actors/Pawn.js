@@ -11,13 +11,10 @@ export class Pawn extends Actor {
     this.inputY = 0;
   }
 
-  applyCommand(command) {
-    switch (command.type) {
-      case 'move':
-        this.inputX = command.x;
-        this.inputY = command.y;
-        break;
-    }
+  /** Adds to this tick's movement input. Several calls add together. */
+  addMovementInput(x, y) {
+    this.inputX += x;
+    this.inputY += y;
   }
 
   applyMovement(deltaTime) {}

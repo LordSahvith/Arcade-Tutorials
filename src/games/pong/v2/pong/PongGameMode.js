@@ -50,8 +50,7 @@ export class PongGameMode extends GameMode {
   }
 
   handleScore(side) {
-    if (side === 'left') this.score.right++;
-    else this.score.left++;
+    side === 'left' ? this.score.right++ : this.score.left++;
   }
 
   ballReset(side) {

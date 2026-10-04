@@ -10,7 +10,7 @@ export class Controller {
     if (!pawn) return;
 
     for (const command of this.produceCommands()) {
-      pawn.applyCommand(command);
+      command.execute(pawn);
     }
   }
 
