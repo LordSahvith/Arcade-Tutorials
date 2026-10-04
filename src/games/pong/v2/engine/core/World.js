@@ -1,3 +1,5 @@
+import { CommandBuffer } from './commands/CommandBuffer';
+
 export class World {
   #nextId = 0;
   actors = [];
@@ -12,6 +14,7 @@ export class World {
     this.renderer = game.renderer;
     this.input = game.input;
     this.gameMode = new GameModeClass(this);
+    this.commands = new CommandBuffer();
   }
 
   beginPlay() {

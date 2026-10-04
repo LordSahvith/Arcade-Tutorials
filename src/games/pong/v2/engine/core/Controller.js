@@ -10,6 +10,7 @@ export class Controller {
     if (!pawn) return;
 
     for (const command of this.produceCommands()) {
+      this.world.commands.record(pawn.id, command);
       command.execute(pawn);
     }
   }
