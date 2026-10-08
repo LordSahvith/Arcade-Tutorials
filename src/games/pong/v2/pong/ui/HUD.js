@@ -5,8 +5,8 @@ export class HUD extends Actor {
    * @param {{x: number, y: number}} pos
    * @param {string} color
    */
-  constructor(pos, color = 'white') {
-    super(pos, color);
+  constructor({ name, pos, color = 'white' }) {
+    super(name, pos, color);
   }
 
   drawScore(renderer) {

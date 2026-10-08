@@ -11,7 +11,8 @@ export class Actor {
    * @param {{x: number, y: number}} pos
    * @param {string} color
    */
-  constructor(pos, color = 'white') {
+  constructor(name, pos, color = 'white') {
+    this.name = name;
     this.pos = { ...pos };
     this.prevPos = { ...pos };
     this.color = color;

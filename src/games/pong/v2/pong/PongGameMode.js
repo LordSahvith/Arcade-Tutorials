@@ -17,20 +17,28 @@ export class PongGameMode extends GameMode {
   beginPlay() {
     // Court
     this.court = this.world.spawn(
-      new Court({ x: CANVAS.WIDTH / 2, y: MARGINS.XS })
+      new Court({ name: 'Court', pos: { x: CANVAS.WIDTH / 2, y: MARGINS.XS } })
     );
 
     // Paddles
-    const paddleLeft = this.world.spawn(new Paddle(PADDLES.LEFT));
-    const paddleRight = this.world.spawn(new Paddle(PADDLES.RIGHT));
+    const paddleLeft = this.world.spawn(
+      new Paddle({ name: 'Left Paddle', type: 'left', ...PADDLES.LEFT })
+    );
+    const paddleRight = this.world.spawn(
+      new Paddle({ name: 'Right Paddle', type: 'right', ...PADDLES.RIGHT })
+    );
     this.paddles = [paddleLeft, paddleRight];
 
     // Ball
     // PongGameMode
-    this.ball = this.world.spawn(new Ball({ ...BALL, paddles: this.paddles }));
+    this.ball = this.world.spawn(
+      new Ball({ name: 'Game Ball', ...BALL, paddles: this.paddles })
+    );
 
     // HUD
-    this.hud = this.world.spawn(new HUD({ x: CANVAS.WIDTH / 2, y: 40 }));
+    this.hud = this.world.spawn(
+      new HUD({ name: 'HUD', pos: { x: CANVAS.WIDTH / 2, y: 40 } })
+    );
 
     // Controllers
     this.world.addController(new PlayerController()).possess(paddleLeft);

@@ -10,14 +10,17 @@ export class Paddle extends Pawn {
    * @param {string} color
    */
   constructor({
+    name,
+    type,
     pos,
     vel = { x: 0, y: 420 },
     size = { width: 20, height: 90 },
     color = 'red',
   }) {
-    super(pos, color);
+    super(name, pos, color);
     this.vel = { ...vel };
     this.size = { ...size };
+    this.type = type;
   }
 
   beginPlay() {

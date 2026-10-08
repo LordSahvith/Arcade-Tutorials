@@ -6,8 +6,8 @@ export class Court extends Actor {
    * @param {{x: number, y: number}} pos top of the net
    * @param {string} color
    */
-  constructor(pos, color = '#a800a8') {
-    super(pos, color);
+  constructor({ name, pos, color = '#a800a8' }) {
+    super(name, pos, color);
     this.dash = MARGINS.SM;
     this.gap = MARGINS.SM;
     this.lineWidth = 3;
