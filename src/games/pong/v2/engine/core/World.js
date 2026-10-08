@@ -30,7 +30,6 @@ export class World {
   }
 
   render(alpha = 1) {
-    this.renderer.clear();
     for (const actor of this.actors) actor.render(this.renderer, alpha);
   }
 

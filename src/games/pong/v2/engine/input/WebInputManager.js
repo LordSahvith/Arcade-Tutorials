@@ -3,12 +3,18 @@ import { PREVENT_DEFAULT_KEYS } from './config';
 
 export class WebInputManager {
   pressedKeys = new Set();
+  justPressedKeys = new Set();
   pointer = new Pointer();
   canvas = null;
   target = null;
 
   constructor({ preventDefaultKeys = PREVENT_DEFAULT_KEYS } = {}) {
     this.preventDefaultKeys = new Set(preventDefaultKeys);
+  }
+
+  endTick() {
+    this.pointer.endTick();
+    this.justPressedKeys.clear();
   }
 
   attach(target = window, canvas) {
@@ -43,6 +49,7 @@ export class WebInputManager {
 
   onBlur = () => {
     this.pressedKeys.clear();
+    this.justPressedKeys.clear();
     this.pointer.cancel();
   };
 
@@ -53,6 +60,7 @@ export class WebInputManager {
    */
   onKeyDown = event => {
     if (this.preventDefaultKeys.has(event.code)) event.preventDefault();
+    if (!event.repeat) this.justPressedKeys.add(event.code);
     this.pressedKeys.add(event.code);
   };
 
@@ -91,10 +99,6 @@ export class WebInputManager {
     this.pointer.onReleased(x, y);
   };
 
-  endTick() {
-    this.pointer.endTick();
-  }
-
   /** Returns -1, 0 or 1 from two sets of key codes. */
   axis(negativeCodes, positiveCodes) {
     return (
@@ -108,5 +112,9 @@ export class WebInputManager {
       if (this.pressedKeys.has(code)) return true;
     }
     return false;
+  }
+
+  wasPressed(code) {
+    return this.justPressedKeys.has(code);
   }
 }

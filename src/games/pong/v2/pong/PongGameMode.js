@@ -5,6 +5,8 @@ import { Court } from './actors/Court';
 import { Paddle } from './actors/Paddle';
 import { Ball } from './actors/Ball';
 import { HUD } from './ui/HUD';
+import { PauseScreen } from './screens/PauseScreen';
+import { GameOverScreen } from './screens/GameOverScreen';
 import { CANVAS, BALL, MARGINS, PADDLES, GAME_DATA } from './config';
 
 export class PongGameMode extends GameMode {
@@ -13,6 +15,12 @@ export class PongGameMode extends GameMode {
   ball = null;
   paddles = [];
   hud = null;
+
+  tick() {
+    if (this.world.input.wasPressed('Escape')) {
+      this.world.game.screens.push(new PauseScreen());
+    }
+  }
 
   beginPlay() {
     // Court
@@ -67,13 +75,7 @@ export class PongGameMode extends GameMode {
   }
 
   onGameOver(side) {
-    console.log('winner:', side === 'left' ? 'right paddle' : 'left paddle');
-
-    this.score = {
-      left: 0,
-      right: 0,
-    };
-
-    this.ballReset(side);
+    const winner = side === 'left' ? 'Right' : 'Left';
+    this.world.game.screens.push(new GameOverScreen(winner));
   }
 }
