@@ -1,5 +1,6 @@
 import { Game } from './engine/core/Game';
-import { TitleScreen } from './pong/screens/TitleScreen';
+import { TitleScreen } from './engine/core/screens/TitleScreen';
+import { PongGameMode } from './pong/PongGameMode';
 import { CANVAS, GAME_DATA } from './pong/config';
 
 window.onload = () => {
@@ -8,7 +9,8 @@ window.onload = () => {
     size: { width: CANVAS.WIDTH, height: CANVAS.HEIGHT },
     tickRate: GAME_DATA.TICK_RATE,
     maxFrameTime: GAME_DATA.MAX_FRAME_TIME,
+    gameMode: PongGameMode,
   });
-  game.screens.push(new TitleScreen());
+  game.screens.push(new TitleScreen({ title: 'PONG' }));
   game.run();
 };

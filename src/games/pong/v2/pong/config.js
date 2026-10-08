@@ -13,7 +13,7 @@ export const CANVAS = {
 export const GAME_DATA = {
   TICK_RATE: 60,
   MAX_FRAME_TIME: 0.25,
-  MAX_SCORE: 7,
+  MAX_SCORE: 1,
 };
 
 export const BALL = {

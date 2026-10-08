@@ -1,4 +1,4 @@
-import { Screen } from '../../engine/core/screens/Screen';
+import { Screen } from './Screen';
 
 export class PauseScreen extends Screen {
   bBlocksRender = false; // keep the frozen game visible underneath

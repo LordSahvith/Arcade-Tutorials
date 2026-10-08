@@ -5,8 +5,8 @@ import { Court } from './actors/Court';
 import { Paddle } from './actors/Paddle';
 import { Ball } from './actors/Ball';
 import { HUD } from './ui/HUD';
-import { PauseScreen } from './screens/PauseScreen';
-import { GameOverScreen } from './screens/GameOverScreen';
+import { PauseScreen } from '../engine/core/screens/PauseScreen';
+import { GameOverScreen } from '../engine/core/screens/GameOverScreen';
 import { CANVAS, BALL, MARGINS, PADDLES, GAME_DATA } from './config';
 
 export class PongGameMode extends GameMode {
@@ -76,6 +76,11 @@ export class PongGameMode extends GameMode {
 
   onGameOver(side) {
     const winner = side === 'left' ? 'Right' : 'Left';
-    this.world.game.screens.push(new GameOverScreen(winner));
+    this.world.game.screens.push(
+      new GameOverScreen({
+        heading: `${winner} player wins!`,
+        lines: [`${this.score.left} - ${this.score.right}`],
+      })
+    );
   }
 }
