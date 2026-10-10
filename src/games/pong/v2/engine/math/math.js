@@ -13,3 +13,7 @@ export function lerp(a, b, alpha) {
 export function clamp(value, min, max) {
   return value < min ? min : value > max ? max : value;
 }
+
+export function randomSign() {
+  return Math.random() < 0.5 ? -1 : 1;
+}

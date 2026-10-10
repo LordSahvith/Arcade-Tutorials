@@ -48,12 +48,22 @@ export class Ball extends Actor {
     this.checkPaddleCollision();
   }
 
+  /**
+   * Serves from the center.
+   *
+   * @param {{x: -1 | 1, y: -1 | 1}} dir which way to send the ball on each axis
+   */
   serve(dir) {
+    const dirX = Math.sign(dir.x) || 1; // never 0: the ball must head toward a side
+    const dirY = Math.sign(dir.y) || 1;
     this.teleport({
       x: this.world.renderer.width / 2,
       y: this.world.renderer.height / 2,
     });
-    this.vel = { x: dir * Math.abs(this.startVel.x), y: this.startVel.y };
+    this.vel = {
+      x: dirX * Math.abs(this.startVel.x),
+      y: dirY * Math.abs(this.startVel.y),
+    };
   }
 
   checkWallCollision() {

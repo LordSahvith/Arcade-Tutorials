@@ -8,6 +8,7 @@ import { HUD } from './ui/HUD';
 import { PauseScreen } from '../engine/core/screens/PauseScreen';
 import { GameOverScreen } from '../engine/core/screens/GameOverScreen';
 import { CANVAS, BALL, MARGINS, PADDLES, GAME_DATA } from './config';
+import { randomSign } from '../engine/math/math';
 
 export class PongGameMode extends GameMode {
   score = { left: 0, right: 0 };
@@ -38,7 +39,6 @@ export class PongGameMode extends GameMode {
     this.paddles = [paddleLeft, paddleRight];
 
     // Ball
-    // PongGameMode
     this.ball = this.world.spawn(
       new Ball({ name: 'Game Ball', ...BALL, paddles: this.paddles })
     );
@@ -51,6 +51,12 @@ export class PongGameMode extends GameMode {
     // Controllers
     this.world.addController(new PlayerController()).possess(paddleLeft);
     this.world.addController(new AIController(this.ball)).possess(paddleRight);
+
+    const dir = {
+      x: randomSign(),
+      y: randomSign(),
+    };
+    this.ball.serve(dir);
   }
 
   onBallOut(side) {
@@ -64,7 +70,11 @@ export class PongGameMode extends GameMode {
 
   ballReset(side) {
     // serve toward the player who lost the point
-    this.ball.serve(side === 'left' ? -1 : 1);
+    const dir = {
+      x: side === 'left' ? -1 : 1,
+      y: randomSign(),
+    };
+    this.ball.serve(dir);
   }
 
   bIsGameOver() {
