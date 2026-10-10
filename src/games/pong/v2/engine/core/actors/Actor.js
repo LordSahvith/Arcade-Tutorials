@@ -4,6 +4,8 @@ export class Actor {
   id = null;
   world = null;
   components = [];
+  bIsHidden = false;
+  bShouldTick = true;
 
   /**
    * Parameter objects should always be in lowercase
@@ -15,6 +17,7 @@ export class Actor {
     this.name = name;
     this.pos = { ...pos };
     this.prevPos = { ...pos };
+    this.startPos = { ...pos };
     this.color = color;
   }
 
@@ -27,12 +30,14 @@ export class Actor {
    * super.tick(deltaTime) before changing pos.
    */
   tick(deltaTime) {
+    if (!this.bShouldTick || this.bIsHidden) return;
     this.prevPos.x = this.pos.x;
     this.prevPos.y = this.pos.y;
     for (const component of this.components) component.tick(deltaTime);
   }
 
   render(renderer, alpha) {
+    if (this.bIsHidden) return;
     for (const component of this.components) component.render(renderer, alpha);
   }
 

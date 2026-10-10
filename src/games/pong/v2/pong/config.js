@@ -31,6 +31,20 @@ export const BALL = {
   maxBounceAngle: Math.PI / 4, // 45° off a paddle edge
 };
 
+export const POWER_UP = {
+  pos: {
+    x: CANVAS.WIDTH / 2,
+    y: -50,
+  },
+  vel: {
+    x: 0,
+    y: 0,
+  },
+  radius: 10,
+  minSpeed: 200,
+  maxSpeed: 400,
+};
+
 const PADDLE = {
   vel: {
     x: 0,

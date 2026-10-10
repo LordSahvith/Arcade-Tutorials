@@ -1,8 +1,9 @@
-import { Actor } from '../../engine/core/actors/Actor';
-import { CircleComponent } from '../../engine/core/components/CircleComponent';
-import { lerp, clamp } from '../../engine/math/math';
+import { Actor } from '../../../engine/core/actors/Actor';
+import { CircleComponent } from '../../../engine/core/components/CircleComponent';
+import { getRandomInt, lerp } from '../../../engine/math/math';
+import { CANVAS, MARGINS, POWER_UP } from '../../config';
 
-export class Ball extends Actor {
+export class PowerUp extends Actor {
   shape = null;
 
   /**
@@ -14,26 +15,29 @@ export class Ball extends Actor {
    */
   constructor({
     name,
+    type,
     pos,
-    vel = { x: 120, y: 120 },
+    vel = { x: 200, y: 50 },
     radius = 10,
-    color = 'red',
-    maxSpeed = 700,
-    speedUp = 1.04,
-    maxBounceAngle = Math.PI / 4, // 45° off a paddle edge,
+    color = 'blue',
+    minSpeed = 200,
+    maxSpeed = 400,
     paddles = [],
+    ball,
   }) {
     super(name, pos, color);
     this.vel = { ...vel };
+    this.type = type;
     this.startVel = { ...vel };
     this.radius = radius;
+    this.minSpeed = minSpeed;
     this.maxSpeed = maxSpeed;
-    this.speedUp = speedUp;
-    this.maxBounceAngle = maxBounceAngle;
     this.paddles = paddles;
+    this.ball = ball;
   }
 
   beginPlay() {
+    this.bIsHidden = true;
     this.shape = this.addComponent(
       new CircleComponent(this.radius, this.color)
     );
@@ -41,50 +45,40 @@ export class Ball extends Actor {
   }
 
   tick(deltaTime) {
+    if (!this.bShouldTick || this.bIsHidden) return;
     super.tick(deltaTime);
 
     this.pos.x += this.vel.x * deltaTime;
     this.pos.y += this.vel.y * deltaTime;
 
-    this.checkWallCollision();
+    this.checkOutOfBounds();
     this.checkPaddleCollision();
   }
 
-  /**
-   * Serves from the center.
-   *
-   * @param {{x: -1 | 1, y: -1 | 1}} dir which way to send the ball on each axis
-   */
-  serve(dir) {
-    const dirX = Math.sign(dir.x) || 1; // never 0: the ball must head toward a side
-    const dirY = Math.sign(dir.y) || 1;
-    this.teleport({
-      x: this.world.renderer.width / 2,
-      y: this.world.renderer.height / 2,
-    });
-    this.vel = {
-      x: dirX * Math.abs(this.startVel.x),
-      y: dirY * Math.abs(this.startVel.y),
-    };
+  checkOutOfBounds() {
+    // left / right: out of bounds, let GameMode handle it
+    if (
+      this.pos.x + this.radius < 0 ||
+      this.pos.x - this.radius > this.world.renderer.width
+    )
+      this.world.gameMode.onPowerUpOut(this);
   }
 
-  checkWallCollision() {
-    // left / right: out of bounds, let GameMode score it
-    if (this.pos.x + this.radius < 0) this.world.gameMode.onBallOut('left');
-    if (this.pos.x - this.radius > this.world.renderer.width)
-      this.world.gameMode.onBallOut('right');
+  spawnOnCourt() {
+    this.teleport({
+      x: CANVAS.WIDTH / 2,
+      y: getRandomInt(MARGINS.MD, CANVAS.HEIGHT - MARGINS.MD),
+    });
+    this.vel.x = -getRandomInt(this.minSpeed, this.maxSpeed);
+    this.bIsHidden = false;
+    this.bShouldTick = true;
+  }
 
-    // top
-    if (this.pos.y - this.radius < 0) {
-      this.pos.y = this.radius; // nudge ball away
-      this.vel.y = Math.abs(this.vel.y); // always down (+1)
-    }
-
-    // bottom
-    if (this.pos.y + this.radius > this.world.renderer.height) {
-      this.pos.y = this.world.renderer.height - this.radius; // nudge ball away
-      this.vel.y = -Math.abs(this.vel.y); // always up (-1)
-    }
+  reset() {
+    this.teleport(this.startPos);
+    this.vel = { ...this.startVel };
+    this.bIsHidden = true;
+    this.bShouldTick = false;
   }
 
   checkPaddleCollision() {
@@ -121,25 +115,12 @@ export class Ball extends Actor {
       this.pos.x = faceX - edge;
       this.pos.y = hitY;
 
-      const paddleCenterY = paddle.pos.y + paddle.size.height / 2;
-      const offset = clamp(
-        (hitY - paddleCenterY) / (paddle.size.height / 2),
-        -1,
-        1
-      );
-
-      const angle = offset * this.maxBounceAngle;
-      const speed = Math.min(
-        Math.hypot(this.vel.x, this.vel.y) * this.speedUp,
-        this.maxSpeed
-      );
-      const dir = bIsLeft ? 1 : -1;
-      this.vel = {
-        x: dir * speed * Math.cos(angle),
-        y: speed * Math.sin(angle),
-      };
+      paddle.addPowerUp(this.createEffect());
+      this.reset();
 
       break;
     }
   }
+
+  createEffect() {}
 }

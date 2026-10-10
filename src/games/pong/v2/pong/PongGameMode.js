@@ -7,8 +7,10 @@ import { Ball } from './actors/Ball';
 import { HUD } from './ui/HUD';
 import { PauseScreen } from '../engine/core/screens/PauseScreen';
 import { GameOverScreen } from '../engine/core/screens/GameOverScreen';
-import { CANVAS, BALL, MARGINS, PADDLES, GAME_DATA } from './config';
+import { CANVAS, BALL, MARGINS, PADDLES, GAME_DATA, POWER_UP } from './config';
 import { randomSign } from '../engine/math/math';
+import { ReverseXDirection } from './actors/powerUps/ReverseXDirection';
+import { ReverseYDirection } from './actors/powerUps/ReverseYDirection';
 
 export class PongGameMode extends GameMode {
   score = { left: 0, right: 0 };
@@ -16,12 +18,7 @@ export class PongGameMode extends GameMode {
   ball = null;
   paddles = [];
   hud = null;
-
-  tick() {
-    if (this.world.input.wasPressed('Escape')) {
-      this.world.game.screens.push(new PauseScreen());
-    }
-  }
+  powerUps = [];
 
   beginPlay() {
     // Court
@@ -30,17 +27,44 @@ export class PongGameMode extends GameMode {
     );
 
     // Paddles
-    const paddleLeft = this.world.spawn(
-      new Paddle({ name: 'Left Paddle', type: 'left', ...PADDLES.LEFT })
+    this.paddles.push(
+      this.world.spawn(
+        new Paddle({ name: 'Left Paddle', type: 'left', ...PADDLES.LEFT })
+      )
     );
-    const paddleRight = this.world.spawn(
-      new Paddle({ name: 'Right Paddle', type: 'right', ...PADDLES.RIGHT })
+    this.paddles.push(
+      this.world.spawn(
+        new Paddle({ name: 'Right Paddle', type: 'right', ...PADDLES.RIGHT })
+      )
     );
-    this.paddles = [paddleLeft, paddleRight];
 
     // Ball
     this.ball = this.world.spawn(
       new Ball({ name: 'Game Ball', ...BALL, paddles: this.paddles })
+    );
+
+    // Powerups
+    this.powerUps.push(
+      this.world.spawn(
+        new ReverseXDirection({
+          name: 'Reverse X Direction',
+          type: 'reverseX',
+          ...POWER_UP,
+          color: 'blue',
+          paddles: this.paddles,
+          ball: this.ball,
+        })
+      ),
+      this.world.spawn(
+        new ReverseYDirection({
+          name: 'Reverse Y Direction',
+          type: 'reverseY',
+          ...POWER_UP,
+          color: 'purple',
+          paddles: this.paddles,
+          ball: this.ball,
+        })
+      )
     );
 
     // HUD
@@ -49,19 +73,36 @@ export class PongGameMode extends GameMode {
     );
 
     // Controllers
-    this.world.addController(new PlayerController()).possess(paddleLeft);
-    this.world.addController(new AIController(this.ball)).possess(paddleRight);
+    this.world.addController(new PlayerController()).possess(this.paddles[0]);
+    this.world
+      .addController(new AIController(this.ball, this.powerUps))
+      .possess(this.paddles[1]);
 
     const dir = {
       x: randomSign(),
       y: randomSign(),
     };
     this.ball.serve(dir);
+
+    for (const powerUp of this.powerUps) {
+      powerUp.spawnOnCourt();
+    }
+  }
+
+  tick() {
+    if (this.world.input.wasPressed('Escape')) {
+      this.world.game.screens.push(new PauseScreen());
+    }
   }
 
   onBallOut(side) {
     this.handleScore(side);
     this.bIsGameOver() ? this.onGameOver(side) : this.ballReset(side);
+  }
+
+  onPowerUpOut(powerUp) {
+    console.log(powerUp);
+    powerUp.reset();
   }
 
   handleScore(side) {

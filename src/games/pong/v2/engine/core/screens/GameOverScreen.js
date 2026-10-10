@@ -1,5 +1,5 @@
 import { Screen } from './Screen';
-import { MARGINS } from '../../../pong/config';
+import { MARGINS } from '../../../pong/config'; // TODO: remove pong dependency
 
 export class GameOverScreen extends Screen {
   bBlocksRender = false;
