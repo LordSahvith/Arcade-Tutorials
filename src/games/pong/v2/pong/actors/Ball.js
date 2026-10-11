@@ -10,17 +10,20 @@ export class Ball extends Actor {
    * @param {{x: number, y: number}} vel
    * @param {number} radius
    * @param {string} color
+   * @param {number} maxSpeed
+   * @param {number} speedUp
+   * @param {number} maxBounceAngle,
    * @param {Array typeof Paddle} paddles
    */
   constructor({
     name,
     pos,
-    vel = { x: 120, y: 120 },
-    radius = 10,
+    vel,
+    radius,
+    maxSpeed,
+    speedUp,
+    maxBounceAngle,
     color = 'red',
-    maxSpeed = 700,
-    speedUp = 1.04,
-    maxBounceAngle = Math.PI / 4, // 45° off a paddle edge,
     paddles = [],
   }) {
     super(name, pos, color);

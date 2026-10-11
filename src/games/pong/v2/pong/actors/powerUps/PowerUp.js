@@ -45,7 +45,6 @@ export class PowerUp extends Actor {
   }
 
   tick(deltaTime) {
-    if (!this.bShouldTick || this.bIsHidden) return;
     super.tick(deltaTime);
 
     this.pos.x += this.vel.x * deltaTime;

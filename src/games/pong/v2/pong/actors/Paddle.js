@@ -4,9 +4,6 @@ import { clamp } from '../../engine/math/math';
 
 export class Paddle extends Pawn {
   heldPowerUps = new Map();
-  activePowerUp = null;
-  reverseXPowerUp = null;
-  reverseYPowerUp = null;
 
   /**
    * @param {{x: number, y: number}} pos
@@ -14,14 +11,7 @@ export class Paddle extends Pawn {
    * @param {{width: number, height: number}} size
    * @param {string} color
    */
-  constructor({
-    name,
-    type,
-    pos,
-    vel = { x: 0, y: 420 },
-    size = { width: 20, height: 90 },
-    color = 'red',
-  }) {
+  constructor({ name, type, pos, vel, size, color = 'red' }) {
     super(name, pos, color);
     this.vel = { ...vel };
     this.size = { ...size };

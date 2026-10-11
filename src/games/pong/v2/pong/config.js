@@ -26,7 +26,7 @@ export const BALL = {
     y: 120,
   },
   radius: 10,
-  maxSpeed: 700,
+  maxSpeed: 900,
   speedUp: 1.04,
   maxBounceAngle: Math.PI / 4, // 45° off a paddle edge
 };
@@ -66,7 +66,7 @@ export const PADDLES = {
       x: PADDLE.vel.x,
       y: PADDLE.vel.y,
     },
-    SIZE: {
+    size: {
       width: PADDLE.SIZE.WIDTH,
       height: PADDLE.SIZE.HEIGHT,
     },

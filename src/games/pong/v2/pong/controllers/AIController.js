@@ -4,6 +4,7 @@ import { MoveCommand } from '../../engine/core/commands/MoveCommand';
 export class AIController extends Controller {
   /**
    * @param {Ball} ball the ball to track
+   * @param {PowerUp[]} powerUps the powerUps to track
    * @param {number} deadZone fraction of paddle height where the AI doesn't move
    */
   constructor(ball, powerUps, deadZone = 0.25) {
@@ -21,10 +22,8 @@ export class AIController extends Controller {
     // default: drift back toward the ball
     let targetY = this.ball.pos.y;
 
-    if (bBallTowardsPaddle) {
-      targetY = this.ball.pos.y;
-    } else {
-      const visible = this.powerUps.find(p => !p.bIsHidden);
+    if (!bBallTowardsPaddle) {
+      const visible = this.powerUps?.find(p => !p.bIsHidden);
       if (visible) targetY = visible.pos.y;
     }
 

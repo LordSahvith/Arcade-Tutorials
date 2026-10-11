@@ -3,8 +3,13 @@ import { Screen } from './Screen';
 export class PauseScreen extends Screen {
   bBlocksRender = false; // keep the frozen game visible underneath
 
+  constructor({ closeBtn = 'Escape' } = {}) {
+    super();
+    this.closeBtn = closeBtn;
+  }
+
   tick() {
-    if (this.game.input.wasPressed('Escape')) this.game.screens.pop();
+    if (this.game.input.wasPressed(this.closeBtn)) this.game.screens.pop();
   }
 
   render(renderer) {

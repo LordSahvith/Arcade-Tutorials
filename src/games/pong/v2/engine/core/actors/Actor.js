@@ -26,18 +26,17 @@ export class Actor {
   }
 
   /**
-   * Saves prevPos for render interpolation. Subclasses that move must call
+   * Saves prevPos for render interpolation.
+   * Subclasses that move must call
    * super.tick(deltaTime) before changing pos.
    */
   tick(deltaTime) {
-    if (!this.bShouldTick || this.bIsHidden) return;
     this.prevPos.x = this.pos.x;
     this.prevPos.y = this.pos.y;
     for (const component of this.components) component.tick(deltaTime);
   }
 
   render(renderer, alpha) {
-    if (this.bIsHidden) return;
     for (const component of this.components) component.render(renderer, alpha);
   }
 

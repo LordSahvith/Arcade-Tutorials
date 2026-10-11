@@ -37,6 +37,8 @@ export class ScreenManager {
 
   render(alpha) {
     this.game.renderer.clear();
+    if (!this.stack.length) return;
+
     // find the lowest screen that should be visible, then draw upward
     let start = this.stack.length - 1;
     while (start > 0 && !this.stack[start].bBlocksRender) start--;

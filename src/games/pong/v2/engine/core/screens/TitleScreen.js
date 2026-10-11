@@ -4,18 +4,18 @@ export class TitleScreen extends Screen {
   constructor({
     title = 'GAME',
     prompt = 'Press Enter to start',
-    startKey = 'Enter',
+    startBtn = 'Enter',
     color = 'white',
   } = {}) {
     super();
     this.title = title;
     this.prompt = prompt;
-    this.startKey = startKey;
+    this.startBtn = startBtn;
     this.color = color;
   }
 
   tick() {
-    if (this.game.input.wasPressed(this.startKey)) this.game.startMatch();
+    if (this.game.input.wasPressed(this.startBtn)) this.game.startMatch();
   }
 
   render(renderer) {

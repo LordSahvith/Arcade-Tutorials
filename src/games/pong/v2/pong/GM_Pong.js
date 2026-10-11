@@ -7,18 +7,15 @@ import { Ball } from './actors/Ball';
 import { HUD } from './ui/HUD';
 import { PauseScreen } from '../engine/core/screens/PauseScreen';
 import { GameOverScreen } from '../engine/core/screens/GameOverScreen';
-import { CANVAS, BALL, MARGINS, PADDLES, GAME_DATA, POWER_UP } from './config';
+import { CANVAS, BALL, MARGINS, PADDLES, GAME_DATA } from './config';
 import { randomSign } from '../engine/math/math';
-import { ReverseXDirection } from './actors/powerUps/ReverseXDirection';
-import { ReverseYDirection } from './actors/powerUps/ReverseYDirection';
 
-export class PongGameMode extends GameMode {
+export class GM_Pong extends GameMode {
   score = { left: 0, right: 0 };
   court = null;
   ball = null;
   paddles = [];
   hud = null;
-  powerUps = [];
 
   beginPlay() {
     // Court
@@ -43,30 +40,6 @@ export class PongGameMode extends GameMode {
       new Ball({ name: 'Game Ball', ...BALL, paddles: this.paddles })
     );
 
-    // Powerups
-    this.powerUps.push(
-      this.world.spawn(
-        new ReverseXDirection({
-          name: 'Reverse X Direction',
-          type: 'reverseX',
-          ...POWER_UP,
-          color: 'blue',
-          paddles: this.paddles,
-          ball: this.ball,
-        })
-      ),
-      this.world.spawn(
-        new ReverseYDirection({
-          name: 'Reverse Y Direction',
-          type: 'reverseY',
-          ...POWER_UP,
-          color: 'purple',
-          paddles: this.paddles,
-          ball: this.ball,
-        })
-      )
-    );
-
     // HUD
     this.hud = this.world.spawn(
       new HUD({ name: 'HUD', pos: { x: CANVAS.WIDTH / 2, y: 40 } })
@@ -83,10 +56,6 @@ export class PongGameMode extends GameMode {
       y: randomSign(),
     };
     this.ball.serve(dir);
-
-    for (const powerUp of this.powerUps) {
-      powerUp.spawnOnCourt();
-    }
   }
 
   tick() {
@@ -98,11 +67,6 @@ export class PongGameMode extends GameMode {
   onBallOut(side) {
     this.handleScore(side);
     this.bIsGameOver() ? this.onGameOver(side) : this.ballReset(side);
-  }
-
-  onPowerUpOut(powerUp) {
-    console.log(powerUp);
-    powerUp.reset();
   }
 
   handleScore(side) {

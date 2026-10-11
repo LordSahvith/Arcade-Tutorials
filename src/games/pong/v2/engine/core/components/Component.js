@@ -1,4 +1,5 @@
 /**
+ * TODO: Add Collision to components
  * Collision is where components pay off.
  * CircleComponent and RectComponent can
  * each describe their own bounds, and a

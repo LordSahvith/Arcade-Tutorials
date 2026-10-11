@@ -1,6 +1,8 @@
 import { Command } from './Command';
 
 export class MoveCommand extends Command {
+  type = 'move';
+
   /**
    * @param {number} x -1 left, 0 none, 1 right
    * @param {number} y -1 up, 0 none, 1 down

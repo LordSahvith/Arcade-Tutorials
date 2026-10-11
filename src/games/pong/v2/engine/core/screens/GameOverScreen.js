@@ -1,5 +1,6 @@
 import { Screen } from './Screen';
-import { MARGINS } from '../../../pong/config'; // TODO: remove pong dependency
+
+const LINE_SPACING = 40;
 
 export class GameOverScreen extends Screen {
   bBlocksRender = false;
@@ -12,24 +13,24 @@ export class GameOverScreen extends Screen {
     heading = 'GAME OVER',
     lines = [],
     prompt = 'Press Enter to play again',
-    restartKey = 'Enter',
+    restartBtn = 'Enter',
     color = 'white',
   } = {}) {
     super();
     this.heading = heading;
     this.lines = lines;
     this.prompt = prompt;
-    this.restartKey = restartKey;
+    this.restartBtn = restartBtn;
     this.color = color;
   }
 
   tick() {
-    if (this.game.input.wasPressed(this.restartKey)) this.game.startMatch();
+    if (this.game.input.wasPressed(this.restartBtn)) this.game.startMatch();
   }
 
   render(renderer) {
     const x = renderer.width / 2;
-    let y = renderer.height / 2 - MARGINS.MD;
+    let y = renderer.height / 2 - LINE_SPACING;
 
     renderer.drawRect(
       { x: 0, y: 0 },
@@ -46,12 +47,12 @@ export class GameOverScreen extends Screen {
     );
 
     for (const line of this.lines) {
-      y += MARGINS.MD;
+      y += LINE_SPACING;
       renderer.drawText({ x, y }, line, '20px monospace', this.color, 'center');
     }
 
     renderer.drawText(
-      { x, y: y + MARGINS.MD },
+      { x, y: y + LINE_SPACING },
       this.prompt,
       '16px monospace',
       this.color,

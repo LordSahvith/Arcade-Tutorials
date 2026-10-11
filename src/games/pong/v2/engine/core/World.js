@@ -25,12 +25,16 @@ export class World {
   tick(deltaTime) {
     this.tickCount++;
     for (const controller of this.controllers) controller.tick(deltaTime);
-    for (const actor of this.actors) actor.tick(deltaTime);
+    for (const actor of this.actors) {
+      if (actor.bShouldTick && !actor.bIsHidden) actor.tick(deltaTime);
+    }
     this.gameMode.tick(deltaTime);
   }
 
   render(alpha = 1) {
-    for (const actor of this.actors) actor.render(this.renderer, alpha);
+    for (const actor of this.actors) {
+      if (!actor.bIsHidden) actor.render(this.renderer, alpha);
+    }
   }
 
   spawn(actor) {

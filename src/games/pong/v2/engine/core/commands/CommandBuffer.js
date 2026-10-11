@@ -16,6 +16,6 @@ export class CommandBuffer {
   }
 
   toJSON() {
-    return { type: 'move', x: this.x, y: this.y };
+    return this.entries;
   }
 }
