@@ -7,8 +7,8 @@ export const PREVENT_DEFAULT_KEYS = [
 ];
 
 export const DEFAULT_MENU_KEYS = {
-  select: 'Enter',
-  back: 'Escape',
-  up: 'KeyW',
-  down: 'KeyS',
+  select: ['Enter', 'Space'],
+  back: ['Escape'],
+  up: ['KeyW', 'ArrowUp'],
+  down: ['KeyS', 'ArrowDown'],
 };

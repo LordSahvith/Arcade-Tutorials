@@ -25,7 +25,7 @@ export class GameOverScreen extends Screen {
   }
 
   tick() {
-    if (this.game.input.wasPressed(this.restartBtn)) this.game.startMatch();
+    if (this.game.input.wasPressed(this.restartBtn)) this.game.showTitle();
   }
 
   render(renderer) {

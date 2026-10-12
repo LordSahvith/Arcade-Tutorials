@@ -1,5 +1,5 @@
 import { Game } from './engine/core/Game';
-import { TitleScreen } from './engine/core/screens/TitleScreen';
+import { MenuScreen } from './engine/core/screens/MenuScreen';
 import { GM_Pong } from './pong/GM_Pong';
 import { GM_BattlePong } from './pong/GM_BattlePong';
 import { CANVAS, GAME_DATA } from './pong/config';
@@ -11,27 +11,26 @@ window.onload = () => {
     tickRate: GAME_DATA.TICK_RATE,
     maxFrameTime: GAME_DATA.MAX_FRAME_TIME,
   });
-  game.screens.push(
-    new TitleScreen({
+
+  game.setTitleScreen(
+    new MenuScreen({
       title: 'PONG',
       options: [
         {
-          title: 'Original',
+          label: 'Original',
           type: 'gameMode',
-          className: GM_Pong,
-          bIsSelected: true,
+          onSelect: game => game.startMatch(GM_Pong),
         },
         {
-          title: 'Battle',
+          label: 'Battle',
           type: 'gameMode',
-          className: GM_BattlePong,
-          bIsSelected: false,
+          onSelect: game => game.startMatch(GM_BattlePong),
         },
         {
-          title: 'Settings',
+          label: 'Settings',
           type: 'setting',
-          className: null,
-          bIsSelected: false,
+          onSelect: game =>
+            console.log('game.screens.push(new SettingsScreen())'),
         },
       ],
     })

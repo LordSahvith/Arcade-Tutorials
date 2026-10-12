@@ -20,6 +20,7 @@ export class Ball extends Actor {
     pos,
     vel,
     radius,
+    speed,
     maxSpeed,
     speedUp,
     maxBounceAngle,
@@ -28,8 +29,8 @@ export class Ball extends Actor {
   }) {
     super(name, pos, color);
     this.vel = { ...vel };
-    this.startVel = { ...vel };
     this.radius = radius;
+    this.speed = speed;
     this.maxSpeed = maxSpeed;
     this.speedUp = speedUp;
     this.maxBounceAngle = maxBounceAngle;
@@ -61,13 +62,15 @@ export class Ball extends Actor {
   serve(dir) {
     const dirX = Math.sign(dir.x) || 1; // never 0: the ball must head toward a side
     const dirY = Math.sign(dir.y) || 1;
+
     this.teleport({
       x: this.world.renderer.width / 2,
       y: this.world.renderer.height / 2,
     });
+
     this.vel = {
-      x: dirX * Math.abs(this.startVel.x),
-      y: dirY * Math.abs(this.startVel.y),
+      x: dirX * Math.abs(this.speed),
+      y: dirY * Math.abs(this.speed),
     };
   }
 

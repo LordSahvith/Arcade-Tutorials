@@ -11,9 +11,10 @@ export class Paddle extends Pawn {
    * @param {{width: number, height: number}} size
    * @param {string} color
    */
-  constructor({ name, type, pos, vel, size, color = 'red' }) {
+  constructor({ name, type, pos, vel, speed, size, color = 'red' }) {
     super(name, pos, color);
     this.vel = { ...vel };
+    this.speed = speed;
     this.size = { ...size };
     this.type = type;
   }
@@ -29,12 +30,8 @@ export class Paddle extends Pawn {
 
   applyMovement(deltaTime) {
     const dir = clamp(this.inputY, -1, 1);
-    this.pos.y += dir * this.vel.y * deltaTime;
-    this.pos.y = clamp(
-      this.pos.y,
-      0,
-      this.world.renderer.height - this.size.height
-    );
+    const next = this.pos.y + dir * this.speed * deltaTime;
+    this.pos.y = clamp(next, 0, this.world.renderer.height - this.size.height);
   }
 
   addPowerUp(effect) {

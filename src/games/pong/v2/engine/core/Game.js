@@ -5,6 +5,7 @@ import { GameScreen } from './screens/GameScreen';
 export class Game {
   #accumulator = 0;
   #lastTime = performance.now();
+  titleScreen = null;
   GameModeClass = null;
 
   constructor({
@@ -17,21 +18,27 @@ export class Game {
     this.renderer = new Renderer(canvasId, size);
     this.input = new WebInputManager({ preventDefaultKeys });
     this.screens = new ScreenManager(this);
-
     this.FIXED_DELTA_TIME = 1 / tickRate;
     this.maxFrameTime = maxFrameTime;
   }
 
-  setGameMode(GameModeClass) {
-    this.GameModeClass = GameModeClass;
+  startMatch(GameModeClass = this.GameModeClass) {
+    if (!GameModeClass) throw new Error('startMatch: no game mode set');
+    this.GameModeClass = GameModeClass; // so "play again" restarts the same mode
+    this.screens.set(new GameScreen(GameModeClass));
   }
 
-  startMatch() {
-    this.screens.set(new GameScreen(this.GameModeClass));
+  showTitle() {
+    this.screens.set(this.titleScreen);
+  }
+
+  setTitleScreen(screen) {
+    this.titleScreen = screen;
   }
 
   run() {
     this.input.attach(window, this.renderer.canvas);
+    this.showTitle();
     requestAnimationFrame(this.loop);
   }
 

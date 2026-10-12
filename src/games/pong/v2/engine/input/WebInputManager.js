@@ -114,6 +114,10 @@ export class WebInputManager {
     return false;
   }
 
+  anyWasPressed(codes) {
+    return codes.some(code => this.justPressedKeys.has(code));
+  }
+
   wasPressed(code) {
     return this.justPressedKeys.has(code);
   }

@@ -22,10 +22,11 @@ export const BALL = {
     y: CANVAS.HEIGHT / 2,
   },
   vel: {
-    x: 175,
-    y: 175,
+    x: 0,
+    y: 0,
   },
   radius: 10,
+  speed: 175,
   maxSpeed: 900,
   speedUp: 1.04,
   maxBounceAngle: Math.PI / 4, // 45° off a paddle edge
@@ -46,10 +47,11 @@ export const POWER_UP = {
 };
 
 const PADDLE = {
-  vel: {
-    x: 0,
-    y: 420,
+  VEL: {
+    X: 0,
+    Y: 0,
   },
+  SPEED: 420,
   SIZE: {
     WIDTH: 20,
     HEIGHT: 90,
@@ -63,9 +65,10 @@ export const PADDLES = {
       y: CANVAS.HEIGHT / 2 - PADDLE.SIZE.HEIGHT / 2,
     },
     vel: {
-      x: PADDLE.vel.x,
-      y: PADDLE.vel.y,
+      x: PADDLE.VEL.X,
+      y: PADDLE.VEL.Y,
     },
+    speed: PADDLE.SPEED,
     size: {
       width: PADDLE.SIZE.WIDTH,
       height: PADDLE.SIZE.HEIGHT,
@@ -77,9 +80,10 @@ export const PADDLES = {
       y: CANVAS.HEIGHT / 2 - PADDLE.SIZE.HEIGHT / 2,
     },
     vel: {
-      x: PADDLE.vel.x,
-      y: PADDLE.vel.y,
+      x: PADDLE.VEL.X,
+      y: PADDLE.VEL.Y,
     },
+    speed: PADDLE.SPEED,
     size: {
       width: PADDLE.SIZE.WIDTH,
       height: PADDLE.SIZE.HEIGHT,
