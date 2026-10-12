@@ -62,8 +62,10 @@ export class GM_Pong extends GameMode {
   }
 
   tick() {
-    if (this.world.input.wasPressed('Escape')) {
-      this.world.game.screens.push(
+    const { game, input } = this.world;
+
+    if (input.anyWasPressed(input.gameKeys.pause)) {
+      game.screens.push(
         new PauseScreen({
           title: 'PAUSE',
           onBack: game => game.screens.pop(),

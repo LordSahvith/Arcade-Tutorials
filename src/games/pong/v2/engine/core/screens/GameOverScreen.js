@@ -13,19 +13,19 @@ export class GameOverScreen extends Screen {
     heading = 'GAME OVER',
     lines = [],
     prompt = 'Press Enter to play again',
-    restartBtn = 'Enter',
     color = 'white',
   } = {}) {
     super();
     this.heading = heading;
     this.lines = lines;
     this.prompt = prompt;
-    this.restartBtn = restartBtn;
     this.color = color;
   }
 
   tick() {
-    if (this.game.input.wasPressed(this.restartBtn)) this.game.showTitle();
+    const { input } = this.game;
+
+    if (input.anyWasPressed(input.menuKeys.select)) this.game.showTitle();
   }
 
   render(renderer) {

@@ -1,5 +1,4 @@
 import { Screen } from './Screen';
-import { DEFAULT_MENU_KEYS } from '../../input/config';
 
 export class MenuScreen extends Screen {
   selectedIndex = 0;
@@ -7,7 +6,6 @@ export class MenuScreen extends Screen {
   constructor({
     title = 'GAME',
     prompt = 'Choose Game Option',
-    inputKeys = DEFAULT_MENU_KEYS,
     options = [],
     onBack = null,
     selectedIndex = 0,
@@ -17,7 +15,6 @@ export class MenuScreen extends Screen {
     super();
     this.title = title;
     this.prompt = prompt;
-    this.inputKeys = inputKeys;
     this.options = options;
     this.onBack = onBack;
     this.selectedIndex = selectedIndex;
@@ -68,20 +65,20 @@ export class MenuScreen extends Screen {
   }
 
   handleInput() {
-    if (this.game.input.anyWasPressed(this.inputKeys.select)) {
+    const { input } = this.game;
+
+    if (input.anyWasPressed(input.menuKeys.select)) {
       this.handleSelect();
       return;
     }
 
-    if (this.onBack && this.game.input.anyWasPressed(this.inputKeys.back)) {
+    if (this.onBack && input.anyWasPressed(input.menuKeys.back)) {
       this.onBack(this.game);
       return;
     }
 
-    if (this.game.input.anyWasPressed(this.inputKeys.up))
-      this.moveSelection(-1);
-    if (this.game.input.anyWasPressed(this.inputKeys.down))
-      this.moveSelection(1);
+    if (input.anyWasPressed(input.menuKeys.up)) this.moveSelection(-1);
+    if (input.anyWasPressed(input.menuKeys.down)) this.moveSelection(1);
   }
 
   handleSelect() {

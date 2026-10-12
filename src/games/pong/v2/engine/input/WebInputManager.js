@@ -1,5 +1,10 @@
 import { Pointer } from './Pointer';
-import { PREVENT_DEFAULT_KEYS } from './config';
+import {
+  PREVENT_DEFAULT_KEYS,
+  DEFAULT_MENU_KEYS,
+  DEFAULT_GAME_KEYS,
+  DEFAULT_ACTION_KEYS,
+} from './config';
 
 export class WebInputManager {
   pressedKeys = new Set();
@@ -8,8 +13,16 @@ export class WebInputManager {
   canvas = null;
   target = null;
 
-  constructor({ preventDefaultKeys = PREVENT_DEFAULT_KEYS } = {}) {
+  constructor({
+    preventDefaultKeys = PREVENT_DEFAULT_KEYS,
+    menuKeys = DEFAULT_MENU_KEYS,
+    gameKeys = DEFAULT_GAME_KEYS,
+    actionKeys = DEFAULT_ACTION_KEYS,
+  } = {}) {
     this.preventDefaultKeys = new Set(preventDefaultKeys);
+    this.menuKeys = menuKeys;
+    this.gameKeys = gameKeys;
+    this.actionKeys = actionKeys;
   }
 
   endTick() {
@@ -108,17 +121,24 @@ export class WebInputManager {
   }
 
   anyKeyPressed(codes) {
-    for (const code of codes) {
-      if (this.pressedKeys.has(code)) return true;
-    }
-    return false;
+    this.#checkCodes(codes, 'anyKeyPressed');
+    return codes.some(code => this.pressedKeys.has(code));
   }
 
   anyWasPressed(codes) {
+    this.#checkCodes(codes, 'anyWasPressed');
     return codes.some(code => this.justPressedKeys.has(code));
   }
 
   wasPressed(code) {
     return this.justPressedKeys.has(code);
+  }
+
+  #checkCodes(codes, method) {
+    if (!Array.isArray(codes)) {
+      throw new Error(
+        `${method}: expected an array of key codes, got ${codes}. Check the key name.`
+      );
+    }
   }
 }

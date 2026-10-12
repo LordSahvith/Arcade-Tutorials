@@ -6,16 +6,14 @@ import { ReverseYCommand } from '../commands/ReverseYCommand';
 export class PlayerController extends Controller {
   produceCommands() {
     const commands = [];
+    const { input } = this.world;
 
-    const moveY = this.world.input.axis(
-      ['KeyW', 'ArrowUp'],
-      ['KeyS', 'ArrowDown']
-    );
+    const moveY = input.axis(input.gameKeys.up, input.gameKeys.down);
     if (moveY) commands.push(new MoveCommand(0, moveY));
 
-    if (this.world.input.wasPressed('KeyH'))
+    if (input.anyWasPressed(input.actionKeys.action1))
       commands.push(new ReverseXCommand());
-    if (this.world.input.wasPressed('KeyJ'))
+    if (input.anyWasPressed(input.actionKeys.action2))
       commands.push(new ReverseYCommand());
 
     return commands;
