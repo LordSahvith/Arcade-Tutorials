@@ -25,7 +25,7 @@ export const BALL = {
     x: 0,
     y: 0,
   },
-  radius: 10,
+  radius: 8,
   speed: 175,
   maxSpeed: 900,
   speedUp: 1.04,
@@ -41,7 +41,7 @@ export const POWER_UP = {
     x: 0,
     y: 0,
   },
-  radius: 10,
+  radius: 8,
   minSpeed: 200,
   maxSpeed: 400,
 };
@@ -53,7 +53,7 @@ const PADDLE = {
   },
   SPEED: 420,
   SIZE: {
-    WIDTH: 20,
+    WIDTH: 15,
     HEIGHT: 90,
   },
 };

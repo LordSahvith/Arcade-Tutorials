@@ -1,4 +1,7 @@
 export class Renderer {
+  #width;
+  #height;
+
   /**
    * @param {String} canvasID
    * @param {{width: number, height: number}} size
@@ -10,16 +13,26 @@ export class Renderer {
     this.ctx = this.canvas.getContext('2d');
     if (!this.ctx) throw new Error('canvas context not found');
 
-    this.canvas.width = size.width;
-    this.canvas.height = size.height;
+    // Renderer constructor
+    const dpr = window.devicePixelRatio || 1;
+
+    this.#width = size.width;
+    this.#height = size.height;
+
+    this.canvas.width = size.width * dpr; // real pixels on screen
+    this.canvas.height = size.height * dpr;
+    this.canvas.style.width = `${size.width}px`; // same size on the page
+    this.canvas.style.height = `${size.height}px`;
+
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // draw in game units
   }
 
   get width() {
-    return this.canvas.width;
+    return this.#width;
   }
 
   get height() {
-    return this.canvas.height;
+    return this.#height;
   }
 
   clear(color = 'black') {
