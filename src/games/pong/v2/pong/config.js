@@ -22,8 +22,8 @@ export const BALL = {
     y: CANVAS.HEIGHT / 2,
   },
   vel: {
-    x: 120,
-    y: 120,
+    x: 175,
+    y: 175,
   },
   radius: 10,
   maxSpeed: 900,

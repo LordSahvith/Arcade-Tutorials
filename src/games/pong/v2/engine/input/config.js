@@ -5,3 +5,10 @@ export const PREVENT_DEFAULT_KEYS = [
   'Enter',
   'Escape',
 ];
+
+export const DEFAULT_MENU_KEYS = {
+  select: 'Enter',
+  back: 'Escape',
+  up: 'KeyW',
+  down: 'KeyS',
+};

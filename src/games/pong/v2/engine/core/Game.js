@@ -5,22 +5,25 @@ import { GameScreen } from './screens/GameScreen';
 export class Game {
   #accumulator = 0;
   #lastTime = performance.now();
+  GameModeClass = null;
 
   constructor({
     canvasId,
     size,
-    gameMode,
     preventDefaultKeys,
     tickRate = 60,
     maxFrameTime = 0.25,
   }) {
     this.renderer = new Renderer(canvasId, size);
     this.input = new WebInputManager({ preventDefaultKeys });
-    this.GameModeClass = gameMode;
     this.screens = new ScreenManager(this);
 
     this.FIXED_DELTA_TIME = 1 / tickRate;
     this.maxFrameTime = maxFrameTime;
+  }
+
+  setGameMode(GameModeClass) {
+    this.GameModeClass = GameModeClass;
   }
 
   startMatch() {

@@ -4,12 +4,11 @@ import { ReverseYDirection } from './actors/powerUps/ReverseYDirection';
 import { GM_Pong } from './GM_Pong';
 
 export class GM_BattlePong extends GM_Pong {
-  powerUps = [];
+  onPowerUpOut(powerUp) {
+    powerUp.reset();
+  }
 
-  beginPlay() {
-    super.beginPlay();
-
-    // Powerups
+  spawnExtras() {
     this.powerUps.push(
       this.world.spawn(
         new ReverseXDirection({
@@ -33,12 +32,6 @@ export class GM_BattlePong extends GM_Pong {
       )
     );
 
-    for (const powerUp of this.powerUps) {
-      powerUp.spawnOnCourt();
-    }
-  }
-
-  onPowerUpOut(powerUp) {
-    powerUp.reset();
+    for (const powerUp of this.powerUps) powerUp.spawnOnCourt();
   }
 }

@@ -10,8 +10,31 @@ window.onload = () => {
     size: { width: CANVAS.WIDTH, height: CANVAS.HEIGHT },
     tickRate: GAME_DATA.TICK_RATE,
     maxFrameTime: GAME_DATA.MAX_FRAME_TIME,
-    gameMode: GM_BattlePong, // TODO: add the ability to have multiple game modes by selection from TitleScreen
   });
-  game.screens.push(new TitleScreen({ title: 'PONG' }));
+  game.screens.push(
+    new TitleScreen({
+      title: 'PONG',
+      options: [
+        {
+          title: 'Original',
+          type: 'gameMode',
+          className: GM_Pong,
+          bIsSelected: true,
+        },
+        {
+          title: 'Battle',
+          type: 'gameMode',
+          className: GM_BattlePong,
+          bIsSelected: false,
+        },
+        {
+          title: 'Settings',
+          type: 'setting',
+          className: null,
+          bIsSelected: false,
+        },
+      ],
+    })
+  );
   game.run();
 };

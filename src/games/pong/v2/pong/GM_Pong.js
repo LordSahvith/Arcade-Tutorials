@@ -16,6 +16,7 @@ export class GM_Pong extends GameMode {
   ball = null;
   paddles = [];
   hud = null;
+  powerUps = [];
 
   beginPlay() {
     // Court
@@ -40,6 +41,8 @@ export class GM_Pong extends GameMode {
       new Ball({ name: 'Game Ball', ...BALL, paddles: this.paddles })
     );
 
+    this.spawnExtras(); // subclasses add thier own
+
     // HUD
     this.hud = this.world.spawn(
       new HUD({ name: 'HUD', pos: { x: CANVAS.WIDTH / 2, y: 40 } })
@@ -53,7 +56,7 @@ export class GM_Pong extends GameMode {
 
     const dir = {
       x: randomSign(),
-      y: randomSign(),
+      y: randomSign() * Math.random(), // TODO: get angle working
     };
     this.ball.serve(dir);
   }
@@ -98,4 +101,6 @@ export class GM_Pong extends GameMode {
       })
     );
   }
+
+  spawnExtras() {}
 }
