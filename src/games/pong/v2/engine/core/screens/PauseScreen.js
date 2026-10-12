@@ -1,29 +1,14 @@
-import { Screen } from './Screen';
+import { MenuScreen } from './MenuScreen';
 
-export class PauseScreen extends Screen {
+export class PauseScreen extends MenuScreen {
   bBlocksRender = false; // keep the frozen game visible underneath
 
-  constructor({ closeBtn = 'Escape' } = {}) {
-    super();
-    this.closeBtn = closeBtn;
-  }
-
-  tick() {
-    if (this.game.input.wasPressed(this.closeBtn)) this.game.screens.pop();
-  }
-
-  render(renderer) {
+  render(renderer, alpha) {
     renderer.drawRect(
       { x: 0, y: 0 },
       { width: renderer.width, height: renderer.height },
       'rgba(0, 0, 0, 0.5)'
     );
-    renderer.drawText(
-      { x: renderer.width / 2, y: renderer.height / 2 },
-      'PAUSED',
-      '36px monospace',
-      'white',
-      'center'
-    );
+    super.render(renderer, alpha);
   }
 }

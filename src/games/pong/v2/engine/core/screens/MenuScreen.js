@@ -2,13 +2,14 @@ import { Screen } from './Screen';
 import { DEFAULT_MENU_KEYS } from '../../input/config';
 
 export class MenuScreen extends Screen {
-  #selectedIndex = 0;
+  selectedIndex = 0;
 
   constructor({
     title = 'GAME',
     prompt = 'Choose Game Option',
     inputKeys = DEFAULT_MENU_KEYS,
     options = [],
+    onBack = null,
     selectedIndex = 0,
     color = 'white',
     selectedColor = 'green',
@@ -18,13 +19,14 @@ export class MenuScreen extends Screen {
     this.prompt = prompt;
     this.inputKeys = inputKeys;
     this.options = options;
-    this.#selectedIndex = selectedIndex;
+    this.onBack = onBack;
+    this.selectedIndex = selectedIndex;
     this.color = color;
     this.selectedColor = selectedColor;
   }
 
   get selectedOption() {
-    return this.options[this.#selectedIndex];
+    return this.options[this.selectedIndex];
   }
 
   tick() {
@@ -46,7 +48,7 @@ export class MenuScreen extends Screen {
 
     for (const [index, option] of this.options.entries()) {
       const color =
-        index === this.#selectedIndex ? this.selectedColor : this.color;
+        index === this.selectedIndex ? this.selectedColor : this.color;
       renderer.drawText(
         { x, y: y - LINE_SPACING + LINE_SPACING * index },
         option.label,
@@ -71,6 +73,11 @@ export class MenuScreen extends Screen {
       return;
     }
 
+    if (this.onBack && this.game.input.anyWasPressed(this.inputKeys.back)) {
+      this.onBack(this.game);
+      return;
+    }
+
     if (this.game.input.anyWasPressed(this.inputKeys.up))
       this.moveSelection(-1);
     if (this.game.input.anyWasPressed(this.inputKeys.down))
@@ -84,6 +91,6 @@ export class MenuScreen extends Screen {
   moveSelection(step) {
     const count = this.options.length;
     if (!count) return;
-    this.#selectedIndex = (this.#selectedIndex + step + count) % count;
+    this.selectedIndex = (this.selectedIndex + step + count) % count;
   }
 }

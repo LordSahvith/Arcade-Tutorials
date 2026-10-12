@@ -63,7 +63,22 @@ export class GM_Pong extends GameMode {
 
   tick() {
     if (this.world.input.wasPressed('Escape')) {
-      this.world.game.screens.push(new PauseScreen());
+      this.world.game.screens.push(
+        new PauseScreen({
+          title: 'PAUSE',
+          onBack: game => game.screens.pop(),
+          options: [
+            {
+              label: 'Resume',
+              onSelect: game => game.screens.pop(),
+            },
+            {
+              label: 'Exit to Title',
+              onSelect: game => game.showTitle(),
+            },
+          ],
+        })
+      );
     }
   }
 
